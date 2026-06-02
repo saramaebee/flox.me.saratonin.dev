@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { DependencyGraph } from "./DependencyGraph.tsx";
 import { SbomPanel } from "./SbomPanel.tsx";
-import { steps, LAST_STEP } from "./steps.ts";
+import { steps, LAST_STEP, STEP } from "./steps.ts";
 
 export function StepController() {
   const [step, setStep] = useState(0);
@@ -24,10 +24,13 @@ export function StepController() {
 
   const s = steps[step];
   const isRepro = step === LAST_STEP;
-  const isVuln = step === 3;
+  const isVuln = step === STEP.vulnerability;
+  const isEnv = step === STEP.environment;
 
   return (
-    <div className={`stage ${isRepro ? "stage-repro" : ""} ${isVuln ? "stage-vuln" : ""}`}>
+    <div
+      className={`stage ${isRepro ? "stage-repro" : ""} ${isVuln ? "stage-vuln" : ""} ${isEnv ? "stage-env" : ""}`}
+    >
       <div className="stage-graph">
         <DependencyGraph step={step} />
         <SbomPanel step={step} />

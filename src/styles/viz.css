@@ -38,6 +38,9 @@
   background: linear-gradient(180deg, rgba(175, 84, 255, 0.06), var(--bg-soft));
   box-shadow: inset 0 0 0 1px rgba(175, 84, 255, 0.32);
 }
+.stage-env {
+  box-shadow: inset 0 0 0 1px rgba(255, 124, 50, 0.28);
+}
 
 .stage-graph {
   position: relative;
@@ -52,6 +55,46 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* Nested boundaries: package-lock.json hull → Flox envelope. */
+.dep-boundary {
+  fill: none;
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+.dep-boundary.lock {
+  stroke: var(--boundary-lock);
+  stroke-width: 1.75;
+  stroke-dasharray: 6 5;
+}
+.dep-boundary.flox {
+  stroke: var(--boundary-flox);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgba(113, 26, 255, 0.35));
+}
+.dep-boundary-label {
+  font: 600 12px var(--font-mono);
+  fill: var(--fg);
+  /* white halo so the label stays legible over nodes */
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* Environment factors that live outside node_modules. */
+.env-node {
+  fill: var(--node-env);
+}
+.env-label {
+  font: 500 10px var(--font-mono);
+  fill: var(--color-black);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
 
 /* SBOM panel slides in from the right edge of the graph. */
