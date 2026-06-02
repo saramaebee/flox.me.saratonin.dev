@@ -43,7 +43,7 @@ export const projects: Project[] = [
     route: "#/drift-calculator",
     icon: "📉",
     title: "The Cost of Environment Drift",
-    navLabel: "drift",
+    navLabel: "drift cost",
     blurb:
       "An ROI model for the hidden tax of non-reproducible developer environments: lost engineering hours, incident drag, onboarding delay — and the recoverable capacity on the other side. Includes presets and a generated executive summary.",
     status: "live",
