@@ -166,6 +166,27 @@ export const vulnPath: string[] = vuln ? pathToRoot(vuln.id) : [];
 export const depNodes = nodes;
 export const depLinks = links;
 
+// The execution environment that lives *outside* node_modules — what the
+// lockfile never describes. Rendered as fixed nodes on a ring around the JS
+// tree, so the "environment is bigger than node_modules" step can show them
+// sitting beyond npm's boundary.
+export interface EnvNode {
+  id: string;
+  label: string;
+  /** Position on the perimeter ring, in radians. */
+  angle: number;
+}
+
+export const envNodes: EnvNode[] = [
+  { id: "node", label: "Node runtime" },
+  { id: "openssl", label: "OpenSSL" },
+  { id: "python", label: "Python" },
+  { id: "gcc", label: "C/C++ toolchain" },
+  { id: "ci", label: "CI image" },
+  { id: "os", label: "OS / arch" },
+  { id: "runtime", label: "runtime" },
+].map((e, i, a) => ({ ...e, angle: (i / a.length) * Math.PI * 2 - Math.PI / 2 }));
+
 export const stats = {
   total: nodes.length,
   direct: DIRECT.length,

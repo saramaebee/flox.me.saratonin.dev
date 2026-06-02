@@ -15,8 +15,8 @@ export function NpmInstall() {
             Step through it. Six declared dependencies become{" "}
             <strong>{stats.total - 1} packages</strong>, a vulnerability hides{" "}
             {stats.maxDepth} levels deep, an SBOM catalogs the lot, provenance
-            asks who to trust — and reproducibility closes the gap. Use the
-            buttons or your ← → arrow keys.
+            asks who to trust — and Flox makes the environment around it
+            reproducible. Use the buttons or your ← → arrow keys.
           </p>
         </div>
       </section>
@@ -27,9 +27,11 @@ export function NpmInstall() {
 
       <section className="container viz-outro">
         <p>
-          This is the story Flox tells as <em>secure software by
-          construction</em> — and the reason this very site is built inside a
-          Flox environment and a Nix flake.
+          You don't stop using npm — you stop pretending{" "}
+          <code>node_modules</code> is the whole supply chain. That's the story
+          Flox tells as <em>secure software by construction</em>, and the
+          reason this very site is built inside a Flox environment and a Nix
+          flake.
         </p>
         <button
           className="btn btn-ghost"

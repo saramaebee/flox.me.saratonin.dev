@@ -51,6 +51,9 @@
   --node-vuln: var(--color-rose-red);
   --node-signed: var(--color-yellow);
   --node-repro: var(--color-violet);
+  --node-env: var(--color-orange); /* environment factors — a different class than JS deps */
+  --boundary-lock: #64748b; /* npm's own boundary — neutral slate, distinct from gray nodes */
+  --boundary-flox: var(--color-purple); /* Flox envelope — brand */
 
   --radius: 12px;
   --radius-sm: 8px;

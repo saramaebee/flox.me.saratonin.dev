@@ -4,16 +4,18 @@ import * as d3 from "d3";
 import {
   depNodes,
   depLinks,
-  vulnId,
+  envNodes,
   vulnPath,
   type DepNode,
 } from "./graphData.ts";
+import { STEP } from "./steps.ts";
 
 type SimNode = DepNode & d3.SimulationNodeDatum;
 type SimLink = d3.SimulationLinkDatum<SimNode> & { source: any; target: any };
 
 const W = 920;
 const H = 640;
+const ENV_R = Math.min(W, H) * 0.36; // ring radius for the environment nodes
 
 const css = (name: string) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
@@ -23,6 +25,22 @@ const vulnSet = new Set(vulnPath);
 
 function visibleUpTo(step: number) {
   return step >= 2 ? 2 : step;
+}
+
+// Padded convex hull → smooth closed path, used to draw the lockfile and Flox
+// boundaries that hug the live force layout.
+function hullPath(pts: [number, number][], pad: number): string {
+  if (pts.length < 3) return "";
+  const hull = d3.polygonHull(pts);
+  if (!hull) return "";
+  const [cx, cy] = d3.polygonCentroid(hull);
+  const expanded = hull.map(([x, y]) => {
+    const dx = x - cx;
+    const dy = y - cy;
+    const d = Math.hypot(dx, dy) || 1;
+    return [x + (dx / d) * pad, y + (dy / d) * pad] as [number, number];
+  });
+  return d3.line().curve(d3.curveCatmullRomClosed.alpha(0.8))(expanded) ?? "";
 }
 
 interface NodeStyle {
@@ -45,9 +63,9 @@ function styleFor(n: SimNode, step: number, palette: Record<string, string>): No
   };
   if (!visible) return base;
 
-  // Step 6 — reproducible: everything pinned to one calm, uniform state.
-  if (step >= 6) {
-    base.fill = n.id === "root" ? palette.repro : palette.repro;
+  // Reproducible: everything pinned to one calm, uniform state.
+  if (step >= STEP.reproducible) {
+    base.fill = palette.repro;
     base.stroke = palette.repro;
     base.strokeWidth = 1.5;
     if (n.vulnerable) {
@@ -57,8 +75,8 @@ function styleFor(n: SimNode, step: number, palette: Record<string, string>): No
     return base;
   }
 
-  // Step 4+ — vulnerability stays lit until reproducibility resolves it.
-  if (step >= 3 && n.vulnerable) {
+  // Vulnerability stays lit from the vuln step until reproducibility resolves it.
+  if (step >= STEP.vulnerability && n.vulnerable) {
     base.fill = palette.vuln;
     base.stroke = palette.vuln;
     base.strokeWidth = 3;
@@ -66,14 +84,14 @@ function styleFor(n: SimNode, step: number, palette: Record<string, string>): No
     return base;
   }
 
-  // Step 4 — SBOM: every component gets cataloged (subtle ink outline).
-  if (step === 4) {
+  // SBOM: every component gets cataloged (subtle ink outline).
+  if (step === STEP.sbom) {
     base.stroke = "rgba(2,8,23,0.28)";
     base.strokeWidth = 1;
   }
 
-  // Step 5 — provenance: signed get a gold ring, unsigned flagged rose.
-  if (step === 5) {
+  // Provenance: signed get a gold ring, unsigned flagged rose.
+  if (step === STEP.provenance) {
     if (n.signed) {
       base.stroke = palette.signed;
       base.strokeWidth = 1.6;
@@ -84,8 +102,8 @@ function styleFor(n: SimNode, step: number, palette: Record<string, string>): No
     }
   }
 
-  // Step 3 — vulnerability: dim everything except the blast-radius path.
-  if (step === 3) {
+  // Vulnerability: dim everything except the blast-radius path.
+  if (step === STEP.vulnerability) {
     if (!vulnSet.has(n.id) && !n.vulnerable) base.opacity = 0.25;
   }
 
@@ -97,7 +115,14 @@ export function DependencyGraph({ step }: { step: number }) {
   const sim = useRef<d3.Simulation<SimNode, SimLink> | null>(null);
   const nodeSel = useRef<d3.Selection<any, SimNode, any, any> | null>(null);
   const linkSel = useRef<d3.Selection<any, SimLink, any, any> | null>(null);
+  const innerPath = useRef<d3.Selection<any, unknown, any, any> | null>(null);
+  const outerPath = useRef<d3.Selection<any, unknown, any, any> | null>(null);
+  const innerLabel = useRef<d3.Selection<any, unknown, any, any> | null>(null);
+  const outerLabel = useRef<d3.Selection<any, unknown, any, any> | null>(null);
+  const envSel = useRef<d3.Selection<any, any, any, any> | null>(null);
   const palette = useRef<Record<string, string>>({});
+  const stepRef = useRef(step);
+  stepRef.current = step;
 
   // Build the simulation once.
   useEffect(() => {
@@ -123,9 +148,39 @@ export function DependencyGraph({ step }: { step: number }) {
     root.fx = W / 2;
     root.fy = H / 2;
 
+    // Fixed perimeter positions for the environment nodes (outside the JS tree).
+    const envPos = envNodes.map((e) => ({
+      ...e,
+      x: W / 2 + ENV_R * Math.cos(e.angle),
+      y: H / 2 + ENV_R * Math.sin(e.angle),
+    }));
+
     const svg = d3.select(ref.current!);
     svg.selectAll("*").remove();
     const g = svg.append("g");
+
+    // Boundary layer sits behind everything.
+    const boundaryLayer = g.append("g");
+    innerPath.current = boundaryLayer
+      .append("path")
+      .attr("class", "dep-boundary lock")
+      .style("opacity", 0);
+    outerPath.current = boundaryLayer
+      .append("path")
+      .attr("class", "dep-boundary flox")
+      .style("opacity", 0);
+    innerLabel.current = boundaryLayer
+      .append("text")
+      .attr("class", "dep-boundary-label")
+      .attr("text-anchor", "middle")
+      .style("opacity", 0)
+      .text("package-lock.json");
+    outerLabel.current = boundaryLayer
+      .append("text")
+      .attr("class", "dep-boundary-label")
+      .attr("text-anchor", "middle")
+      .style("opacity", 0)
+      .text("flox");
 
     const link = g
       .append("g")
@@ -148,6 +203,24 @@ export function DependencyGraph({ step }: { step: number }) {
 
     node.append("title").text((d) => `${d.name}@${d.version}`);
 
+    // Environment nodes + labels, fixed on the perimeter ring.
+    const envG = g
+      .append("g")
+      .selectAll("g.env")
+      .data(envPos)
+      .join("g")
+      .attr("class", "env")
+      .attr("transform", (d) => `translate(${d.x},${d.y})`)
+      .style("opacity", 0);
+    envG.append("circle").attr("class", "env-node").attr("r", 7);
+    envG
+      .append("text")
+      .attr("class", "env-label")
+      .attr("text-anchor", "middle")
+      .attr("dy", (d) => (d.y < H / 2 ? -12 : 20))
+      .text((d) => d.label);
+    envSel.current = envG;
+
     const simulation = d3
       .forceSimulation<SimNode>(nodes)
       .force(
@@ -169,6 +242,22 @@ export function DependencyGraph({ step }: { step: number }) {
           .attr("x2", (d: any) => d.target.x)
           .attr("y2", (d: any) => d.target.y);
         node.attr("cx", (d) => d.x!).attr("cy", (d) => d.y!);
+
+        // Redraw the boundaries around the live layout.
+        const limit = visibleUpTo(stepRef.current);
+        const jsPts = nodes
+          .filter((n) => n.revealStep <= limit && n.x != null)
+          .map((n) => [n.x!, n.y!] as [number, number]);
+        if (!jsPts.length) return;
+        const envPts = envPos.map((e) => [e.x, e.y] as [number, number]);
+
+        innerPath.current?.attr("d", hullPath(jsPts, 40));
+        outerPath.current?.attr("d", hullPath(jsPts.concat(envPts), 26));
+
+        const innerTop = d3.min(jsPts, (p) => p[1]) ?? H / 2;
+        innerLabel.current?.attr("x", W / 2).attr("y", innerTop - 32);
+        const outerBottom = d3.max(envPts, (p) => p[1]) ?? H;
+        outerLabel.current?.attr("x", W / 2).attr("y", outerBottom + 34);
       });
 
     sim.current = simulation;
@@ -201,21 +290,57 @@ export function DependencyGraph({ step }: { step: number }) {
       .transition()
       .duration(620)
       .attr("stroke", (d: any) =>
-        step === 3 && vulnSet.has(d.target.id) ? pal.edgeHot : pal.edge,
+        step === STEP.vulnerability && vulnSet.has(d.target.id)
+          ? pal.edgeHot
+          : pal.edge,
       )
       .attr("stroke-width", (d: any) =>
-        step === 3 && vulnSet.has(d.target.id) ? 2.4 : 1,
+        step === STEP.vulnerability && vulnSet.has(d.target.id) ? 2.4 : 1,
       )
       .attr("stroke-opacity", (d: any) => {
         const tVisible = d.target.revealStep <= limit;
         if (!tVisible) return 0;
-        if (step === 3) return vulnSet.has(d.target.id) ? 0.9 : 0.12;
-        if (step >= 6) return 0.5;
+        if (step === STEP.vulnerability)
+          return vulnSet.has(d.target.id) ? 0.9 : 0.12;
+        if (step >= STEP.reproducible) return 0.5;
         return 0.35;
       });
 
+    // Nested-boundary arc: lockfile box → environment nodes → Flox envelope.
+    const innerOpacity =
+      step === STEP.lockfile ? 0.9 : step === STEP.environment ? 0.45 : 0;
+    const outerOpacity = step >= STEP.reproducible ? 1 : 0;
+    const envOpacity = step >= STEP.environment ? 1 : 0;
+
+    innerPath.current?.transition().duration(620).style("opacity", innerOpacity);
+    innerLabel.current
+      ?.transition()
+      .duration(620)
+      .style("opacity", innerOpacity > 0 ? 1 : 0);
+    outerPath.current?.transition().duration(620).style("opacity", outerOpacity);
+    outerLabel.current?.transition().duration(620).style("opacity", outerOpacity);
+    envSel.current?.transition().duration(620).style("opacity", envOpacity);
+
+    // For the boundary arc, pull the tree into a tight central disk so the
+    // boundaries read and the environment ring sits clearly outside it. The
+    // earlier steps keep the loose, sprawling "exploded" layout. Collapsing the
+    // link distances is what actually compacts the 6-deep tree — centering
+    // alone can't overcome the links.
+    const tight = step >= STEP.lockfile;
+    const linkForce = sim.current?.force("link") as
+      | d3.ForceLink<SimNode, SimLink>
+      | undefined;
+    linkForce
+      ?.distance((l: any) => (tight ? 7 : 26 + l.target.depth * 6))
+      .strength(tight ? 1 : 0.7);
+    (sim.current?.force("charge") as d3.ForceManyBody<SimNode> | undefined)?.strength(
+      tight ? -12 : -44,
+    );
+    sim.current?.force("x", d3.forceX(W / 2).strength(tight ? 0.18 : 0.05));
+    sim.current?.force("y", d3.forceY(H / 2).strength(tight ? 0.18 : 0.05));
+
     // Reheat so newly revealed nodes settle nicely.
-    sim.current?.alpha(0.45).restart();
+    sim.current?.alpha(0.7).restart();
   }, [step]);
 
   return (
