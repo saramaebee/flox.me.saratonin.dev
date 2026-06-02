@@ -61,15 +61,15 @@ export const projects: Project[] = [
     jd: "Construct product comparisons and technical narratives.",
   },
   {
-    slug: "translator",
-    route: "#/translator",
-    icon: "🤖",
-    title: "Infrastructure Translator",
-    navLabel: "translator",
+    slug: "drift-lab",
+    route: "#/drift-lab",
+    icon: "🔬",
+    title: "Local-to-CI Drift Lab",
+    navLabel: "drift lab",
     blurb:
-      "Describe a build problem in plain language; get back root-cause analysis, environment risks, and reproducibility recommendations. A small demonstration of AI as leverage.",
-    status: "soon",
-    jd: "Operate agentically. Use AI as leverage.",
+      "An interactive lab: three columns — Local, CI, Production-like — that break in real time as you toggle drift scenarios (runtime versions, system libraries, architecture, lockfiles, secrets, CUDA). Then a Reproducible Environment Mode collapses the implicit assumptions into one declared, versioned contract.",
+    status: "live",
+    jd: "Turn a developer-felt problem into a visual narrative a platform buyer acts on.",
   },
 ];
 
