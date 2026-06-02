@@ -69,8 +69,12 @@ function styleFor(n: SimNode, step: number, palette: Record<string, string>): No
     base.stroke = palette.repro;
     base.strokeWidth = 1.5;
     if (n.vulnerable) {
-      // pinned to a known-good version — no longer hot
+      // Pinning doesn't make the CVE vanish — it makes it reproducible and
+      // inspectable. Keep the node flagged (vuln-colored ring), no longer "hot".
       base.fill = palette.repro;
+      base.stroke = palette.vuln;
+      base.strokeWidth = 2;
+      base.radius = 8;
     }
     return base;
   }
