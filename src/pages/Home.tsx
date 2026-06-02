@@ -18,7 +18,16 @@ export function Home() {
             >
               ▶ Run the npm install walkthrough
             </button>
-            <a className="btn btn-ghost" href="#projects">
+            <a
+              className="btn btn-ghost"
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("projects")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               See all projects
             </a>
           </div>
