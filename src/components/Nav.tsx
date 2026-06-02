@@ -16,31 +16,24 @@ export function Nav({ route }: { route: string }) {
           supply&nbsp;chains, understood
         </a>
         <div className="nav-links">
-          <a
-            href="#/npm-install"
-            className={active === "npm-install" ? "active" : ""}
-            onClick={(e) => go(e, "#/npm-install")}
-          >
-            npm install
-          </a>
-          {projects
-            .filter((p) => p.status === "soon")
-            .map((p) => (
+          {projects.map((p) => {
+            const classes = [
+              p.status === "soon" ? "nav-hide-sm" : "",
+              active === p.slug ? "active" : "",
+            ]
+              .filter(Boolean)
+              .join(" ");
+            return (
               <a
                 key={p.slug}
                 href={p.route}
-                className={
-                  "nav-hide-sm" + (active === p.slug ? " active" : "")
-                }
+                className={classes}
                 onClick={(e) => go(e, p.route)}
               >
-                {p.slug === "drift-calculator"
-                  ? "drift"
-                  : p.slug === "three-ways"
-                    ? "three ways"
-                    : "translator"}
+                {p.navLabel}
               </a>
-            ))}
+            );
+          })}
         </div>
       </div>
     </nav>
