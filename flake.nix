@@ -44,7 +44,15 @@
           version = "1.0.0";
           src = pkgs.lib.fileset.toSource {
             root = ./.;
-            fileset = pkgs.lib.fileset.unions [ ./src ./CNAME ./package.json ./bun.lock ];
+            # The three-ways page imports the benchmark JSON as its single
+            # source of truth, so the hermetic build needs that file in scope.
+            fileset = pkgs.lib.fileset.unions [
+              ./src
+              ./CNAME
+              ./package.json
+              ./bun.lock
+              ./three-ways/bench/results/results.json
+            ];
           };
           nativeBuildInputs = [ pkgs.bun ];
           configurePhase = ''

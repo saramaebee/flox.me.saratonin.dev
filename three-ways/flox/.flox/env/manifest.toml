@@ -1,0 +1,81 @@
+schema-version = "1.12.0"
+
+# thumbprint — the Flox procurement strategy.
+#
+# This single declarative file is the entire environment contract: the CPython
+# runtime, the Postgres server, and every system library the app links against
+# (libpq, OpenSSL, libjpeg, zlib) are pinned together in one lockfile. The same
+# manifest gives you:
+#   - a reproducible dev shell        ->  flox activate
+#   - the database, already running   ->  flox activate --start-services
+#   - a production OCI image          ->  flox containerize
+# No env-var dance, no separate Dockerfile, no "works on my machine".
+
+[install]
+python312.pkg-path = "python312"        # the runtime, pinned — not "whatever python3 is"
+postgresql_16.pkg-path = "postgresql_16" # server + client + libpq, same version dev and prod
+
+[vars]
+# Static parts of the contract. Dynamic paths (PGDATA lives under the per-env
+# cache) are exported in the hook below, where $FLOX_ENV_CACHE is available.
+PGPORT = "5433"
+SIGNING_KEY = "dev-demo-key"
+DATABASE_URL = "postgresql://postgres@127.0.0.1:5433/postgres"
+
+[hook]
+on-activate = '''
+  # Resolve the project root (the dir that contains this flox env) and the
+  # shared app one level up. FLOX_ENV_PROJECT points at three-ways/flox.
+  export APP_ROOT="$(cd "$FLOX_ENV_PROJECT/.." && pwd)"
+  export PGDATA="$FLOX_ENV_CACHE/pgdata"
+  export VENV="$FLOX_ENV_CACHE/venv"
+
+  # First-run: create the Postgres cluster (trust auth — local dev only).
+  if [ ! -d "$PGDATA" ]; then
+    echo "→ initializing Postgres cluster at $PGDATA"
+    initdb -U postgres --auth=trust -D "$PGDATA" >/dev/null
+    {
+      echo "listen_addresses = '127.0.0.1'"
+      echo "port = $PGPORT"
+      echo "unix_socket_directories = '$FLOX_ENV_CACHE'"
+    } >> "$PGDATA/postgresql.conf"
+  fi
+
+  # First-run: create the venv and install the *pinned* Python deps. Because
+  # python, libpq, OpenSSL and libjpeg all come from this env, pip finds
+  # everything it needs with zero extra environment variables.
+  if [ ! -d "$VENV" ]; then
+    echo "→ creating venv + installing pinned deps"
+    python -m venv "$VENV"
+    "$VENV/bin/pip" install -q --upgrade pip
+    "$VENV/bin/pip" install -q -r "$APP_ROOT/app/requirements.txt"
+  fi
+  export PATH="$VENV/bin:$PATH"
+
+  echo "→ thumbprint env ready — python $(python --version 2>&1 | cut -d' ' -f2), postgres $(postgres --version | grep -oE '[0-9]+\\.[0-9]+' | head -1)"
+  echo "  start the stack:  flox activate --start-services"
+  echo "  then:             curl -F file=@app/sample.jpg localhost:8000/thumbnail"
+'''
+
+[services]
+# The database, declared as part of the environment. `flox activate
+# --start-services` brings it up — no separate install, no compose file.
+postgres.command = "postgres -D $PGDATA"
+
+# The API, served from the venv the hook built. Same env as the dev shell.
+api.command = "cd $APP_ROOT && $VENV/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000"
+
+[containerize.config]
+# `flox containerize` renders this same environment as an OCI image — the
+# container's toolchain is byte-for-byte the dev shell's. (experimental)
+user = "1000:1000"
+exposed-ports = ["8000/tcp"]
+cmd = ["bash", "-lc", "cd \"$APP_ROOT\" && \"$VENV/bin/uvicorn\" app.main:app --host 0.0.0.0 --port 8000"]
+
+[options]
+systems = [
+  "aarch64-darwin",
+  "aarch64-linux",
+  "x86_64-darwin",
+  "x86_64-linux",
+]

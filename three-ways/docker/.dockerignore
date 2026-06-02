@@ -1,0 +1,9 @@
+# Build context is three-ways/ — keep the image lean and the cache stable.
+**/__pycache__
+**/*.pyc
+native/
+flox/
+bench/
+docker/
+README.md
+.venv

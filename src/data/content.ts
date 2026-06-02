@@ -53,11 +53,11 @@ export const projects: Project[] = [
     slug: "three-ways",
     route: "#/three-ways",
     icon: "🧪",
-    title: "I Rebuilt the Same Environment Three Ways",
+    title: "Same App, Three Environments",
     navLabel: "three ways",
     blurb:
-      "Native vs. Docker vs. Nix/Flox — setup time, reproducibility, failure modes, and team onboarding, with terminal recordings and benchmarks. (This very site is the Flox case study.)",
-    status: "soon",
+      "One identical app, set up native vs. Docker vs. Flox — with real benchmarks and the drift surface each leaves open. The punchline: the same image posted to the same app returns different hashes under Docker and Flox. (This very site is the Flox case study.)",
+    status: "live",
     jd: "Construct product comparisons and technical narratives.",
   },
   {

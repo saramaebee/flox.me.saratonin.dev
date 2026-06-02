@@ -1,0 +1,8 @@
+# Local secrets — copy .env.example to docker/.env yourself.
+docker/.env
+# Python build artifacts
+__pycache__/
+*.pyc
+.venv/
+# Flox containerize output
+*.tar

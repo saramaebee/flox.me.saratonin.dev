@@ -1,0 +1,21 @@
+# Pinned dependencies for the thumbprint service.
+#
+# These pins are exact on purpose: reproducibility starts with naming the
+# versions. But pinning the Python *packages* does not pin the *system*
+# libraries they link against (libpq, OpenSSL, libjpeg, zlib) or the CPython
+# interpreter — that gap is exactly what the three procurement strategies
+# expose differently.
+#
+# Wheel-vs-source note: on common platforms each of these ships a binary wheel,
+# so `pip install` usually succeeds without a compiler. The pain shows up when
+# wheels are unavailable: `pip install --no-binary :all:`, locked-down/air-gapped
+# CI, an unusual arch, or an old pip. In those cases:
+#   - psycopg      needs `pg_config` (libpq-dev / brew libpq) on PATH
+#   - cryptography needs OpenSSL headers + a Rust toolchain (cargo)
+#   - Pillow       needs libjpeg + zlib headers
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+psycopg[binary]==3.2.3
+Pillow==11.1.0
+cryptography==44.0.0
