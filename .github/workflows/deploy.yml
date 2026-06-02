@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+# Builds the static site inside the project's Flox environment — the same
+# pinned toolchain developers get from `flox activate` — and publishes it to
+# GitHub Pages. Dogfooding the reproducibility this site is about.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; newer pushes supersede in-flight runs.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  FLOX_DISABLE_METRICS: "true"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Flox
+        uses: flox/install-flox-action@v2
+
+      - name: Build inside the Flox environment
+        run: flox activate -- bash -c "bun install --frozen-lockfile && bun run build"
+
+      - name: Add CNAME for the custom domain
+        run: cp CNAME public/
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
