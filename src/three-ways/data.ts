@@ -23,7 +23,7 @@ export const approaches: Approach[] = [
   {
     key: "native",
     label: "Native",
-    blurb: "Set up directly on the host. Fast, familiar, and entirely implicit.",
+    blurb: "Set up directly on the host. Familiar and quick, but every dependency stays implicit.",
     accent: "--node-vuln",
   },
   {
@@ -87,7 +87,7 @@ export const comparisonRows: ComparisonRow[] = [
     dimension: "Runtime version",
     why: "Is the Python the app runs on actually pinned?",
     cells: {
-      native: { value: "host default", rating: "bad", note: `Drifts per machine — this host's python3 is ${provenance.host_python}, not the pinned 3.12.` },
+      native: { value: "host default", rating: "bad", note: `Drifts per machine: this host's python3 is ${provenance.host_python}, not the pinned 3.12.` },
       docker: { value: "base image", rating: "mixed", note: "Pinned if you pin the digest; `python:3.12-slim` moves otherwise." },
       flox: { value: "manifest-pinned", rating: "good", note: "python312 resolved from one lockfile across all four systems." },
     },
@@ -95,7 +95,7 @@ export const comparisonRows: ComparisonRow[] = [
   {
     key: "syslibs",
     dimension: "System libraries",
-    why: "libpq, OpenSSL, libjpeg — the things package pins don't cover.",
+    why: "libpq, OpenSSL, libjpeg: the things package pins don't cover.",
     cells: {
       native: { value: "unpinned", rating: "bad", note: "Whatever brew/apt last installed; the source of the env-var dance." },
       docker: { value: "base + apt", rating: "mixed", note: "Pinned inside the image, but duplicated from the host setup knowledge." },
@@ -108,7 +108,7 @@ export const comparisonRows: ComparisonRow[] = [
     why: "Where Postgres comes from and who starts it.",
     cells: {
       native: { value: "install yourself", rating: "bad", note: "brew services / systemctl, created roles, hope the version matches." },
-      docker: { value: "compose service", rating: "good", note: "`db` service with a healthcheck — a real strength of the Docker path." },
+      docker: { value: "compose service", rating: "good", note: "`db` service with a healthcheck, a genuine strength of the Docker path." },
       flox: { value: "declared service", rating: "good", note: "`postgres` service in the manifest; no separate install." },
     },
   },
@@ -119,7 +119,7 @@ export const comparisonRows: ComparisonRow[] = [
     cells: {
       native: { value: "n/a", rating: "bad", note: "No prod artifact; every laptop is its own environment." },
       docker: { value: "no", rating: "bad", note: "Your editor/LSP/psql run on the host against a different Python and libpq than the container." },
-      flox: { value: "yes", rating: "good", note: `\`flox containerize\` renders the dev shell as an OCI image (${t.flox.container_size}) — same lock.` },
+      flox: { value: "yes", rating: "good", note: `\`flox containerize\` renders the dev shell as an OCI image (${t.flox.container_size}), from the same lock.` },
     },
   },
   {
@@ -129,7 +129,7 @@ export const comparisonRows: ComparisonRow[] = [
     cells: {
       native: { value: "no guarantee", rating: "bad", note: "Output depends on whatever system libs happen to be installed." },
       docker: { value: "differs from native", rating: "mixed", note: `Docker's libjpeg decoded sample.jpg to sha256 ${drift.docker_sha256.slice(0, 12)}…` },
-      flox: { value: "pinned & shareable", rating: "good", note: `Flox's libjpeg produced sha256 ${drift.flox_sha256.slice(0, 12)}… — different bytes, same code.` },
+      flox: { value: "pinned & shareable", rating: "good", note: `Flox's libjpeg produced sha256 ${drift.flox_sha256.slice(0, 12)}…: different bytes, same code.` },
     },
   },
 ];
@@ -173,7 +173,7 @@ export const driftPoints: DriftPoint[] = [
     key: "shell",
     label: "Shell & env vars",
     layer: 3,
-    description: "PATH, PKG_CONFIG_PATH, LDFLAGS — the setup dance.",
+    description: "PATH, PKG_CONFIG_PATH, LDFLAGS: the setup dance.",
     exposure: { native: "exposed", docker: "controlled", flox: "controlled" },
   },
   {

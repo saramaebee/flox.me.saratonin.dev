@@ -13,7 +13,7 @@ export function buildLabSummary(
   if (active.length === 0) {
     return (
       "With no drift introduced, Local, CI, and Production-like agree on every " +
-      "assumption. That alignment is the goal — toggle a scenario to see how a " +
+      "assumption. That alignment is the goal. Toggle a scenario to see how a " +
       "single implicit assumption breaks it, then enable Reproducible Environment " +
       "Mode to collapse the differences back into one declared, versioned contract."
     );
@@ -34,8 +34,8 @@ export function buildLabSummary(
     return (
       `Introducing ${active.length} drift ${active.length === 1 ? "scenario" : "scenarios"} ` +
       `(${list}) leaves ${brokenPhrase}. None of these is random: each is an implicit ` +
-      `assumption — a runtime version, a system library, an architecture, a lockfile, or a ` +
-      `required variable — that no environment agreed to in writing. The code is identical ` +
+      `assumption (a runtime version, a system library, an architecture, a lockfile, or a ` +
+      `required variable) that no environment agreed to in writing. The code is identical ` +
       `across all three columns; only the inputs underneath it differ, which is exactly the ` +
       `drift that burns engineering hours and weakens build provenance.`
     );
@@ -46,7 +46,7 @@ export function buildLabSummary(
     explicitOnly.length > 0
       ? ` The exception is the required configuration (e.g. ${explicitOnly[0].title.toLowerCase()}): ` +
         `reproducibility makes the requirement explicit and visible, but a value must still be ` +
-        `supplied — the contract is declared, not the secret invented.`
+        `supplied: the contract is declared, not the secret invented.`
       : "";
 
   return (
@@ -56,7 +56,7 @@ export function buildLabSummary(
     `Local, CI, and Production-like instead of inherited from each host. ` +
     `${result.stats.passing} of 3 environments pass.` +
     explicitNote +
-    ` The point isn't magic — it's that every input is now an explicit, versioned, ` +
-    `inspectable artifact rather than a hidden assumption.`
+    ` The point is that every input is now a versioned, inspectable artifact you ` +
+    `declare upfront, instead of an assumption baked into each host.`
   );
 }

@@ -32,7 +32,7 @@ export function Home() {
             </a>
           </div>
           <p className="signature">
-            Built by <strong>{site.name}</strong> — software supply chain,
+            Built by <strong>{site.name}</strong>: software supply chain,
             SBOMs &amp; provenance, reproducible environments.
           </p>
         </div>

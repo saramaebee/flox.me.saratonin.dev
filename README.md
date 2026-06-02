@@ -1,24 +1,24 @@
 # flox.me.saratonin.dev
 
 **Making software supply chains understandable.** An interactive portfolio
-microsite by Sara Beaudet — the flagship is a stepped D3 walkthrough of *what
+microsite by Sara Beaudet. The flagship is a stepped D3 walkthrough of *what
 actually happens when you run `npm install`*: transitive explosion, a
 vulnerability buried deep in the tree, SBOM generation, provenance verification,
 and the reproducible-by-construction alternative.
 
-The site argues for reproducibility — so it's **built reproducibly**, inside a
+The site argues for reproducibility, so it's **built reproducibly**, inside a
 Flox environment and a Nix flake. The artifact embodies the message.
 
 ## Stack
 
-- **Bun** — runtime, bundler, dev server (no Vite/webpack/Node)
-- **React 19 + D3** — the interactive dependency-graph visualization
-- **Hash routing** — deploys as static files to a subdomain, no server rewrites
-- **Flox + Nix** — reproducible dev environment and hermetic build
+- **Bun**: runtime, bundler, dev server (no Vite/webpack/Node)
+- **React 19 + D3**: the interactive dependency-graph visualization
+- **Hash routing**: deploys as static files to a subdomain, no server rewrites
+- **Flox + Nix**: reproducible dev environment and hermetic build
 
 ## Develop
 
-The reproducible path (recommended) — everything pinned by Flox:
+The reproducible path (recommended) pins everything by Flox:
 
 ```bash
 flox activate          # enters the env, installs JS deps on first run
@@ -91,5 +91,5 @@ flake.nix               hermetic Nix build + dev shell
 
 ---
 
-*An independent portfolio project — not affiliated with or endorsed by Flox.
+*An independent portfolio project. Not affiliated with or endorsed by Flox.
 Brand styling references flox.dev to demonstrate product-marketing fit.*

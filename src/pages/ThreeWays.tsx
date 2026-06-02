@@ -34,7 +34,7 @@ export function ThreeWays() {
           <span className="eyebrow">Product comparison</span>
           <h1>Same app, three environments</h1>
           <p className="lede">
-            One small service — set up natively, with Docker, and with Flox. The
+            One small service, set up natively, with Docker, and with Flox. The
             application code is <em>identical</em> across all three; only how the
             runtime, system libraries, and database get procured changes. That
             difference is the whole ballgame.
@@ -54,9 +54,8 @@ export function ThreeWays() {
             Three hours later they’re debugging Python versions, OpenSSL, a
             missing Postgres client, and a transitive dependency that behaves
             differently on Apple Silicon. None of that is the product. All of it
-            is environment drift — and it’s not an annoyance, it’s wasted
-            capacity that compounds across every laptop, every CI run, every
-            incident.
+            is environment drift, and it’s wasted capacity that compounds across
+            every laptop, every CI run, and every incident.
           </p>
         </div>
       </section>
@@ -71,16 +70,16 @@ export function ThreeWays() {
           <p>
             The app thumbnails an image (Pillow → libjpeg), signs it
             (cryptography → OpenSSL), and stores it in Postgres (psycopg →
-            libpq), pinned to CPython 3.12 — deliberately chosen because this is
+            libpq), pinned to CPython 3.12, deliberately chosen because this is
             where native dependencies actually hurt. We didn’t pick an ecosystem
             that makes the point easy; we picked the one where it’s honest. The
             numbers below are measured on a {provenance.os}/{provenance.arch}{" "}
             machine (whose default <code>python3</code> is {provenance.host_python},
-            not the pinned 3.12 — drift before we even begin).
+            not the pinned 3.12, drift before we even begin).
           </p>
           <p className="tw-aside">
             Containers package the <em>application</em>. Reproducible
-            environments package the <em>developer contract</em> — the runtime,
+            environments package the <em>developer contract</em>: the runtime,
             the system libraries, and the services, as one shareable, versioned
             artifact.
           </p>
@@ -102,7 +101,7 @@ export function ThreeWays() {
           <p>
             Pinning your <em>packages</em> (a lockfile) doesn’t pin your{" "}
             <em>environment</em>. Below the application sit eight layers each
-            approach controls — or doesn’t. Select an approach to recolour the
+            approach controls, or doesn’t. Select an approach to recolour the
             stack and watch the exposed surface shrink.
           </p>
         </div>
@@ -121,8 +120,8 @@ export function ThreeWays() {
             <h2>The headline isn’t the step count</h2>
           </div>
           <p>
-            The tempting comparison is “Native has fourteen steps, Docker has
-            seven, Flox has two.” The real comparison is what those differences
+            It’s tempting to compare step counts: native has fourteen, Docker
+            seven, Flox two. What actually matters is what those differences
             cost. More implicit dependencies mean more CI breakage. More
             local/CI mismatch means slower incident diagnosis. Less repeatability
             means weaker auditability and worse supply-chain governance.
@@ -143,7 +142,7 @@ export function ThreeWays() {
             </div>
           </div>
           <p>
-            Different hashes, identical source — because the <code>libjpeg</code>{" "}
+            Different hashes, identical source: the <code>libjpeg</code>{" "}
             that decodes the image isn’t the same library in the two
             environments. That’s drift you can measure. To size it in dollars,{" "}
             <button className="tw-link" type="button" onClick={() => navigate("#/drift-calculator")}>
@@ -176,10 +175,10 @@ export function ThreeWays() {
       {/* thesis */}
       <section className="container viz-outro">
         <p>
-          The future of developer environments isn’t another README. It’s a
-          reproducible contract between the developer, CI, production, and the
-          software supply chain. The runnable code for all three setups —
-          including the benchmark that produced these numbers — is on{" "}
+          A README can’t pin a developer environment. A reproducible contract
+          can: one shared between the developer, CI, production, and the
+          software supply chain. The runnable code for all three setups
+          (including the benchmark that produced these numbers) is on{" "}
           <a href={REPO}>GitHub</a>; this site is itself built inside a pinned
           Flox environment, so the medium agrees with the message.
         </p>

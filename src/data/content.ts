@@ -20,7 +20,7 @@ export const site = {
   name: "Sara Beaudet",
   theme: "Making software supply chains understandable",
   tagline:
-    "Interactive technical narratives about what's really inside your software — dependencies, SBOMs, provenance, and reproducible-by-construction environments.",
+    "Interactive technical narratives about what's really inside your software: dependencies, SBOMs, provenance, and reproducible-by-construction environments.",
   repo: "https://github.com/saramaebee",
   linkedin: "https://www.linkedin.com/in/sara-mae-beaudet/",
   mainSite: "https://me.saratonin.dev",
@@ -45,7 +45,7 @@ export const projects: Project[] = [
     title: "The Cost of Environment Drift",
     navLabel: "drift cost",
     blurb:
-      "An ROI model for the hidden tax of non-reproducible developer environments: lost engineering hours, incident drag, onboarding delay — and the recoverable capacity on the other side. Includes presets and a generated executive summary.",
+      "An ROI model for the hidden tax of non-reproducible developer environments: the lost engineering hours, incident drag, and onboarding delay it causes, and the capacity reproducibility recovers. Includes presets and a generated executive summary.",
     status: "live",
     jd: "Develop ROI frameworks and enablement tools.",
   },
@@ -56,7 +56,7 @@ export const projects: Project[] = [
     title: "Same App, Three Environments",
     navLabel: "three ways",
     blurb:
-      "One identical app, set up native vs. Docker vs. Flox — with real benchmarks and the drift surface each leaves open. The punchline: the same image posted to the same app returns different hashes under Docker and Flox. (This very site is the Flox case study.)",
+      "One identical app, set up native vs. Docker vs. Flox, with real benchmarks and the drift surface each leaves open. The punchline: the same image posted to the same app returns different hashes under Docker and Flox. (This very site is the Flox case study.)",
     status: "live",
     jd: "Construct product comparisons and technical narratives.",
   },
@@ -67,7 +67,7 @@ export const projects: Project[] = [
     title: "Local-to-CI Drift Lab",
     navLabel: "drift lab",
     blurb:
-      "An interactive lab: three columns — Local, CI, Production-like — that break in real time as you toggle drift scenarios (runtime versions, system libraries, architecture, lockfiles, secrets, CUDA). Then a Reproducible Environment Mode collapses the implicit assumptions into one declared, versioned contract.",
+      "An interactive lab: three columns (Local, CI, Production-like) that break in real time as you toggle drift scenarios (runtime versions, system libraries, architecture, lockfiles, secrets, CUDA). Then a Reproducible Environment Mode collapses the implicit assumptions into one declared, versioned contract.",
     status: "live",
     jd: "Turn a developer-felt problem into a visual narrative a platform buyer acts on.",
   },

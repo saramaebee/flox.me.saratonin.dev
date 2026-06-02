@@ -5,7 +5,7 @@
 const FRAMES = [
   {
     title: "Engineering productivity",
-    body: "Recover hours quietly lost to setup, debugging, and broken builds — and convert them back into shipped work.",
+    body: "Recover hours quietly lost to setup, debugging, and broken builds, and put them back into shipped work.",
   },
   {
     title: "Incident reduction",
@@ -13,7 +13,7 @@ const FRAMES = [
   },
   {
     title: "Developer onboarding",
-    body: "New hires reach a working environment in minutes, not days — onboarding stops being a tax on the whole team.",
+    body: "New hires reach a working environment in minutes, not days. Onboarding stops pulling time from the rest of the team.",
   },
   {
     title: "Platform standardization",

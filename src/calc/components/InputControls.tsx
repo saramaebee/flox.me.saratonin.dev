@@ -35,7 +35,7 @@ const controls: Control[] = [
   { kind: "number", field: "engineers", label: "Engineers", why: "Scope of recurring productivity loss.", min: 1, step: 1, suffix: "eng" },
   { kind: "number", field: "fullyLoadedCost", label: "Avg. fully-loaded cost", why: "Converts hours to dollars.", min: 0, step: 10_000, prefix: "$", suffix: "/yr" },
   { kind: "number", field: "newHiresPerQuarter", label: "New hires per quarter", why: "Onboarding drag.", min: 0, step: 1, suffix: "/qtr" },
-  { kind: "number", field: "deploysPerWeek", label: "Deployments per week", why: "More deploys → more environment-mismatch exposure. (Context only — not in the core math.)", min: 0, step: 1, suffix: "/wk" },
+  { kind: "number", field: "deploysPerWeek", label: "Deployments per week", why: "More deploys → more environment-mismatch exposure. (Context only, not in the core math.)", min: 0, step: 1, suffix: "/wk" },
   { kind: "number", field: "incidentsPerMonth", label: "Drift incidents per month", why: "Prod/staging failures from config or env mismatch.", min: 0, step: 1, suffix: "/mo" },
   { kind: "slider", field: "hrsPerIncident", label: "Hours lost per incident", why: "Cross-functional debugging cost.", min: 1, max: 40, step: 0.5, format: (v) => `${v} hrs` },
   { kind: "slider", field: "localSetupHrsPerEngPerMonth", label: "Local setup/debug hrs", why: "The everyday “works on my machine” tax, per engineer per month.", min: 0, max: 20, step: 0.5, format: (v) => `${v} hrs/eng·mo` },

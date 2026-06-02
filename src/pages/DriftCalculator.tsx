@@ -45,7 +45,7 @@ export function DriftCalculator() {
             Turn “works on my machine” into an enterprise business case: lost
             engineering hours, incident drag, onboarding delay, and the
             recoverable capacity of reproducible infrastructure. Every team pays
-            an environment-drift tax — this estimates yours.
+            an environment-drift tax. This estimates yours.
           </p>
         </div>
       </section>
@@ -83,8 +83,8 @@ export function DriftCalculator() {
           <summary>Assumptions &amp; method</summary>
           <p>
             This is a directional model. It multiplies a few recognizable
-            recurring costs — local setup/debug time, drift-related incidents,
-            CI/build failures, and onboarding drag — by a fully-loaded hourly
+            recurring costs (local setup/debug time, drift-related incidents,
+            CI/build failures, and onboarding drag) by a fully-loaded hourly
             rate, then applies an expected reduction from reproducible
             environments. Deployments per week is shown for context but is not in
             the core math.
@@ -121,9 +121,10 @@ export function DriftCalculator() {
 
       <section className="container viz-outro">
         <p>
-          The same thesis behind this microsite: reproducibility is not a
-          developer nicety, it’s an enterprise lever. This page is built inside a
-          pinned Flox environment — the model and the medium agree.
+          The same thesis behind this microsite: reproducibility lowers
+          operational costs that compound across teams, well beyond developer
+          convenience. This page is built inside a pinned Flox environment, so
+          the model and the medium agree.
         </p>
         <button className="btn btn-ghost" type="button" onClick={() => navigate("#/")}>
           ← Back to projects

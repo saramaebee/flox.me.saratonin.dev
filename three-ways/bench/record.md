@@ -7,7 +7,7 @@ this file holds what doesn't reduce to a single number.
 ## Machine
 
 - macOS (Darwin 25.1.0), Apple Silicon (`arm64`).
-- Host `python3` is **3.14.2** — i.e. *not* the `3.12.8` the app pins. Version
+- Host `python3` is **3.14.2**, i.e. *not* the `3.12.8` the app pins. Version
   drift exists before any dependency is installed. (observed)
 
 ## Flox path (observed)
@@ -18,7 +18,7 @@ this file holds what doesn't reduce to a single number.
 - `flox activate --start-services` brought up Postgres + the API together; all
   three endpoints returned 200 (`/health`, `/thumbnail`, `/thumbnails`).
 - `flox containerize` produced a loadable OCI image of **~432 MB** (the
-  environment closure — python + postgres + libs; the app is added on top).
+  environment closure: python + postgres + libs; the app is added on top).
 
 ## Docker path (observed)
 
@@ -28,7 +28,7 @@ this file holds what doesn't reduce to a single number.
 - Stack came up via compose with the `db` healthcheck gating the `app` start;
   all endpoints returned 200.
 
-## The drift finding (observed — the headline)
+## The drift finding (observed, the headline)
 
 Posting the identical `app/sample.jpg` to the identical app:
 
@@ -37,7 +37,7 @@ Posting the identical `app/sample.jpg` to the identical app:
 - under **Docker**, it returned `sha256` starting `c7f0b7c9…`
   (thumbnail = 82 bytes)
 
-Same source, same input, **different output hash** — because the `libjpeg` that
+Same source, same input, **different output hash**, because the `libjpeg` that
 decodes the JPEG differs between nixpkgs (Flox) and Debian (Docker). This is the
 clearest possible demonstration that pinning your *Python packages* does not pin
 your *system libraries*. `results.json` records the exact hashes from the latest

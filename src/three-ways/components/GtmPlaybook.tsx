@@ -4,16 +4,16 @@
 const REUSE = [
   { surface: "Blog / landing module", use: "The before/after that makes reproducibility concrete without leading with Nix." },
   { surface: "Sales deck", use: "One slide: same app, three setups, the drift surface shrinking to near-zero." },
-  { surface: "DevRel artifact", use: "A repo engineers can clone, run, and argue with — credibility you can't fake." },
+  { surface: "DevRel artifact", use: "A repo engineers can clone, run, and check the claims against." },
   { surface: "Webinar / talk", use: "Live demo: post the same image to two environments, get two different hashes." },
   { surface: "ROI follow-up", use: "Hand the drift cost to the calculator to size it in dollars for a buyer." },
 ];
 
 const BRIDGE = [
-  ["Environment management", "the day-to-day pain every engineer feels"],
+  ["Environment management", "inconsistent setups across machines and CI"],
   ["Reproducibility", "the same contract on laptop, CI, and prod"],
   ["Supply-chain trust", "you can enumerate and verify what you ship"],
-  ["Enterprise velocity", "faster onboarding, fewer incidents, auditable builds"],
+  ["Enterprise velocity", "faster onboarding and fewer incidents, with builds you can audit"],
 ];
 
 export function GtmPlaybook() {
