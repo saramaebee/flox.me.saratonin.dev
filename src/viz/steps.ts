@@ -25,7 +25,7 @@ export const steps: Step[] = [
     caption:
       "Each dependency has its own dependencies. The resolver walks the registry, picking versions that satisfy every range.",
     takeaway:
-      "Version ranges (^, ~) let npm pick compatible code at install time — convenient, and one more thing to pin down before it's reproducible.",
+      "Version ranges (^, ~) let npm resolve compatible code when the tree is first created or updated — convenient, and one more thing to lock before it is reproducible.",
   },
   {
     key: "explode",
@@ -57,7 +57,7 @@ export const steps: Step[] = [
     key: "provenance",
     command: "$ cosign verify-attestation …",
     title: "Verify provenance",
-    caption: `Provenance asks: where did each artifact actually come from, and can we prove it? ${stats.unsigned} packages here ship no verifiable signature.`,
+    caption: `Provenance asks: where did each artifact actually come from, and can we prove it? In this graph, ${stats.unsigned} packages have no verifiable signature or attestation available to this workflow.`,
     takeaway:
       "An SBOM tells you what's there. Provenance tells you whether to trust it.",
   },
@@ -66,7 +66,7 @@ export const steps: Step[] = [
     command: "$ npm ci  # from package-lock.json",
     title: "The lockfile pins the tree — as far as npm reaches",
     caption:
-      "package-lock.json records the exact resolved tree, and npm ci installs it frozen, byte-for-byte. Reproducibility, solved — for the JavaScript packages.",
+      "package-lock.json records the exact resolved tree, and npm ci installs from it without re-resolving versions. Reproducibility, largely solved — for the JavaScript package graph.",
     takeaway:
       "npm already locks its own world well. The open question is everything that world runs inside.",
   },
@@ -84,7 +84,7 @@ export const steps: Step[] = [
     command: "$ flox activate",
     title: "The reproducible environment around npm",
     caption:
-      "npm tells you what your app depends on. Flox makes the entire environment that installs, builds, tests, and runs it reproducible — Node, system packages, toolchains, CI, and runtime included.",
+      "npm resolves your JavaScript dependency graph. Flox makes the entire environment that installs, builds, tests, and runs it reproducible — Node, system packages, toolchains, CI, and runtime included.",
     takeaway:
       "package-lock.json freezes the dependency tree. Flox freezes the world around it.",
   },
