@@ -1,0 +1,635 @@
+/* Local-to-CI Drift Lab. Reuses shared primitives from global.css / viz.css /
+ * calc.css (.container, .eyebrow, .lede, .section, .section-head, .viz-intro,
+ * .viz-outro, .exec-summary, .gtm*, .btn, .tw-link). Only Lab-specific layout
+ * and the three-column simulator live here. All colours reference theme.css. */
+
+.dl-thesis {
+  margin-top: 1.5rem;
+  max-width: 60ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--fg);
+  border-left: 3px solid var(--accent);
+  padding: 0.5rem 0 0.5rem 1.25rem;
+}
+
+.dl-lab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ───────────────────────── scenario toggles ───────────────────────── */
+
+.dl-toggles {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.dl-toggles-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.dl-toggles-hint {
+  margin-top: 0.4rem;
+  color: var(--fg-muted);
+  font-size: 0.9rem;
+  max-width: 52ch;
+}
+
+.dl-toggles-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.dl-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.dl-reset {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+.dl-reset:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dl-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.1rem 1.5rem;
+}
+
+.dl-group {
+  border: none;
+  padding: 0;
+  min-width: 0;
+}
+
+.dl-group legend {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  margin-bottom: 0.55rem;
+  padding: 0;
+}
+
+.dl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition),
+    box-shadow var(--transition);
+}
+.dl-chip:hover {
+  border-color: var(--accent);
+}
+.dl-chip.on {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg));
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+.dl-chip-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+/* the master reproducible-mode switch */
+.dl-repro {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+.dl-repro.on {
+  border-color: var(--node-repro);
+  background: color-mix(in srgb, var(--node-repro) 7%, var(--bg));
+}
+.dl-repro-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.dl-repro-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--color-gray-300);
+  transition: background var(--transition);
+}
+.dl-repro.on .dl-repro-switch {
+  background: var(--node-repro);
+}
+.dl-repro-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-white);
+  transition: transform var(--transition);
+}
+.dl-repro.on .dl-repro-knob {
+  transform: translateX(18px);
+}
+.dl-repro-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.dl-repro-text strong {
+  font-size: 0.98rem;
+  color: var(--color-black);
+}
+.dl-repro-text span {
+  font-size: 0.86rem;
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+
+/* ───────────────────────── stat strip ───────────────────────── */
+
+.dl-stat-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.1rem;
+  padding: 0.85rem 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+.dl-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--fg-muted);
+}
+.dl-stat strong {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--fg);
+}
+.dl-stat-pass strong {
+  color: var(--node-repro);
+}
+.dl-stat-warn strong {
+  color: var(--color-orange);
+}
+.dl-stat-fail strong {
+  color: var(--node-vuln);
+}
+.dl-stat-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+.dl-stat-meta strong {
+  color: var(--accent);
+}
+
+/* ───────────────────────── environment columns ───────────────────────── */
+
+.dl-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.dl-col {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.dl-col.dl-warning {
+  border-color: color-mix(in srgb, var(--color-orange) 45%, var(--border));
+}
+.dl-col.dl-failing {
+  border-color: color-mix(in srgb, var(--node-vuln) 45%, var(--border));
+  box-shadow: 0 14px 36px -28px var(--node-vuln);
+}
+
+.dl-col-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  border-top: 3px solid var(--col-accent, var(--border));
+}
+.dl-col-titles h3 {
+  font-size: 1.05rem;
+}
+.dl-col-titles p {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+
+.dl-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.dl-status-mark {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.dl-status-passing {
+  color: var(--node-repro);
+  background: color-mix(in srgb, var(--node-repro) 12%, transparent);
+}
+.dl-status-warning {
+  color: var(--color-orange);
+  background: color-mix(in srgb, var(--color-orange) 15%, transparent);
+}
+.dl-status-failing {
+  color: var(--node-vuln);
+  background: color-mix(in srgb, var(--node-vuln) 12%, transparent);
+}
+
+.dl-fields {
+  display: flex;
+  flex-direction: column;
+}
+.dl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.dl-field:last-child {
+  border-bottom: none;
+}
+.dl-field dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+}
+.dl-field dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.dl-value {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  color: var(--fg);
+}
+.dl-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.dl-state-mark {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.dl-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+}
+.dl-badge.pinned {
+  color: var(--node-repro);
+  border-color: color-mix(in srgb, var(--node-repro) 45%, var(--border));
+  background: color-mix(in srgb, var(--node-repro) 8%, transparent);
+}
+
+/* per-cell state accents */
+.dl-field-drift {
+  background: color-mix(in srgb, var(--color-yellow) 13%, transparent);
+}
+.dl-field-drift .dl-state-mark {
+  color: var(--color-orange);
+}
+.dl-field-missing {
+  background: color-mix(in srgb, var(--node-vuln) 9%, transparent);
+}
+.dl-field-missing .dl-value,
+.dl-field-missing .dl-state-mark {
+  color: var(--node-vuln);
+}
+.dl-field-pinned {
+  background: color-mix(in srgb, var(--node-repro) 8%, transparent);
+}
+.dl-field-pinned .dl-state-mark {
+  color: var(--node-repro);
+}
+
+/* ───────────────────────── explanation panel ───────────────────────── */
+
+.dl-explain {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.dl-explain-empty p {
+  margin-top: 0.6rem;
+  color: var(--fg-muted);
+  max-width: 64ch;
+  line-height: 1.6;
+}
+.dl-explain-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.dl-explain-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.25rem;
+}
+.dl-explain-card header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+.dl-explain-card h3 {
+  font-size: 1rem;
+}
+
+.dl-pill {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.dl-pill-failing {
+  color: var(--node-vuln);
+  background: color-mix(in srgb, var(--node-vuln) 12%, transparent);
+}
+.dl-pill-warning {
+  color: var(--color-orange);
+  background: color-mix(in srgb, var(--color-orange) 15%, transparent);
+}
+.dl-pill-resolved {
+  color: var(--node-repro);
+  background: color-mix(in srgb, var(--node-repro) 12%, transparent);
+}
+
+.dl-explain-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.dl-explain-rows > div {
+  display: grid;
+  gap: 0.15rem;
+}
+.dl-explain-rows dt {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+.dl-explain-rows dd {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.dl-explain-repro p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--fg);
+  margin-bottom: 0.5rem;
+}
+.dl-explain-repro p:last-child {
+  margin-bottom: 0;
+}
+.dl-explain-honest {
+  border-left: 3px solid var(--color-orange);
+  padding-left: 0.85rem;
+  color: var(--fg-muted);
+}
+
+/* ───────────────────────── drift timeline ───────────────────────── */
+
+.dl-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  position: relative;
+}
+.dl-timeline-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  opacity: 0.55;
+  transition: opacity var(--transition), border-color var(--transition),
+    box-shadow var(--transition);
+}
+.dl-timeline-stage.lit {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--node-vuln) 40%, var(--border));
+  box-shadow: 0 12px 30px -26px var(--node-vuln);
+}
+.dl-timeline-repro .dl-timeline-stage.lit {
+  border-color: color-mix(in srgb, var(--node-repro) 45%, var(--border));
+  box-shadow: none;
+}
+.dl-timeline-node {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+}
+.dl-timeline-stage.lit .dl-timeline-node {
+  color: var(--color-white);
+  background: var(--node-vuln);
+  border-color: var(--node-vuln);
+}
+.dl-timeline-repro .dl-timeline-stage.lit .dl-timeline-node {
+  background: var(--node-repro);
+  border-color: var(--node-repro);
+}
+.dl-timeline-body h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0.3rem;
+}
+.dl-timeline-body p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+.dl-timeline-arrow {
+  position: absolute;
+  top: 1.6rem;
+  right: -0.85rem;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid var(--border);
+  z-index: 1;
+}
+.dl-timeline-arrow.lit {
+  border-left-color: var(--node-vuln);
+}
+.dl-timeline-repro .dl-timeline-arrow.lit {
+  border-left-color: var(--node-repro);
+}
+.dl-timeline-caption {
+  grid-column: 1 / -1;
+  font-size: 0.88rem;
+  color: var(--fg-muted);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+/* ───────────────────────── enterprise / supply chain ───────────────────────── */
+
+.dl-section-soft {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.dl-frame-line {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem !important;
+}
+.dl-summary {
+  margin-top: 2rem;
+}
+
+.dl-supply {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+.dl-supply-point {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.dl-supply-point h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.dl-supply-point p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+/* ───────────────────────── responsive ───────────────────────── */
+
+@media (max-width: 860px) {
+  .dl-columns {
+    grid-template-columns: 1fr;
+  }
+  .dl-timeline {
+    grid-template-columns: 1fr;
+  }
+  .dl-timeline-arrow {
+    top: auto;
+    bottom: -0.85rem;
+    right: 50%;
+    transform: translateX(50%) rotate(90deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .dl-toggles,
+  .dl-explain {
+    padding: 1.1rem;
+  }
+  .dl-toggles-head {
+    flex-direction: column;
+  }
+}

@@ -8,6 +8,7 @@ import { Home } from "./pages/Home.tsx";
 import { NpmInstall } from "./pages/NpmInstall.tsx";
 import { DriftCalculator } from "./pages/DriftCalculator.tsx";
 import { ThreeWays } from "./pages/ThreeWays.tsx";
+import { DriftLab } from "./pages/DriftLab.tsx";
 import { ComingSoon } from "./components/ComingSoon.tsx";
 import { projectBySlug } from "./data/content.ts";
 
@@ -24,6 +25,8 @@ function App() {
     page = <DriftCalculator />;
   } else if (slug === "three-ways") {
     page = <ThreeWays />;
+  } else if (slug === "drift-lab") {
+    page = <DriftLab />;
   } else {
     const project = projectBySlug(slug);
     page = project ? (
