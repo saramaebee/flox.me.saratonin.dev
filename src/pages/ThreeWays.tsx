@@ -142,9 +142,11 @@ export function ThreeWays() {
             </div>
           </div>
           <p>
-            Different hashes, identical source: the <code>libjpeg</code>{" "}
-            that decodes the image isn’t the same library in the two
-            environments. That’s drift you can measure. To size it in dollars,{" "}
+            Different hashes, identical source: the same pinned{" "}
+            <code>Pillow</code> resolves to a different platform build in each
+            environment, and every wheel bundles its own image codecs. Pinning
+            your packages doesn’t pin the environment they run in. That’s drift
+            you can measure. To size it in dollars,{" "}
             <button className="tw-link" type="button" onClick={() => navigate("#/drift-calculator")}>
               run it through the drift calculator →
             </button>

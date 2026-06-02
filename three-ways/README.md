@@ -15,7 +15,7 @@ across all three; only how the runtime, system libraries, and database are
 | --- | --- | --- | --- |
 | [native/](native/) | `./run.sh` (after a host setup) | nothing system-level | every machine drifts |
 | [docker/](docker/) | `docker compose … up --build` | base image + apt | dev shell ≠ prod image; second source of truth |
-| [flox/](flox/) | `flox activate --start-services` | runtime + libs + db, one lock | none (dev shell *is* the contract) |
+| [flox/](flox/) | `flox activate --start-services` | runtime + db, one lock | none (dev shell *is* the contract) |
 
 ## The app, exercised
 
@@ -27,9 +27,10 @@ curl localhost:8000/thumbnails                          # reads it back from Pos
 ## The punchline, as one number
 
 Post the *same* `sample.jpg` to the *same* app under Docker and under Flox and
-compare the returned `sha256`. They differ because the `libjpeg` that decodes
-the image is not the same library in the two environments. Same code, same
-input, different artifact. That is environment drift, made measurable. See
+compare the returned `sha256`. They differ because the identical pinned `Pillow`
+resolves to a different platform build in each environment, each bundling its own
+image codecs. Same code, same input, different artifact. That is environment
+drift, made measurable. See
 [`bench/`](bench/) for the harness and [`results.json`](bench/results/results.json).
 
 ## Layout

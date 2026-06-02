@@ -14,8 +14,9 @@ FROM python:3.12.8-slim-bookworm AS builder
 
 # System libraries needed to BUILD the native extensions. If wheels are
 # available these go unused; with --no-binary or on an odd arch they are load-
-# bearing. libpq-dev -> pg_config; libjpeg/zlib -> Pillow; build-essential +
-# the rust toolchain -> cryptography from source.
+# bearing. libpq-dev -> pg_config; libjpeg/zlib -> Pillow; build-essential ->
+# cryptography from source (which also needs a Rust toolchain, not installed
+# here since the wheel is used).
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         libpq-dev \

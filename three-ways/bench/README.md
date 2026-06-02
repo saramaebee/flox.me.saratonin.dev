@@ -12,8 +12,10 @@ the single source of truth, so the page and the runnable demo can't drift apart.
   activate.
 - **Artifact-hash drift**: the same `app/sample.jpg` posted to the identical app
   running under Docker vs. Flox, comparing the returned `sha256`. A difference is
-  real system-library drift (the `libjpeg` that decodes the JPEG differs between
-  Debian and nixpkgs), not a bug. It's the whole thesis in one number.
+  real environment drift, not a bug: the identical pinned `Pillow` resolves to a
+  different platform build in each environment (Docker runs the Linux wheel, the
+  Flox path the native macOS wheel), each bundling its own image codecs. Pinning
+  the packages doesn't pin the environment — that's the whole thesis in one number.
 
 ## What is NOT measured here (reasoned)
 

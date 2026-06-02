@@ -1,8 +1,8 @@
 # Flox: one declarative contract
 
 The entire environment is [`​.flox/env/manifest.toml`](.flox/env/manifest.toml):
-the CPython runtime, the Postgres server, and every system library the app
-links against, pinned together in one lockfile, for all four
+the CPython runtime and the Postgres server (with libpq from its closure),
+pinned together in one lockfile, for all four
 `aarch64/x86_64 × darwin/linux` systems.
 
 ## Run it
@@ -17,10 +17,10 @@ curl localhost:8000/thumbnails
 
 First activation runs the `[hook]`: it `initdb`s a local Postgres cluster under
 the env cache and builds a venv from the **pinned** `app/requirements.txt`.
-Because python, libpq, OpenSSL and libjpeg all come from the env, `pip install`
-finds everything with **zero extra environment variables**, unlike the
-`PKG_CONFIG_PATH` / `LDFLAGS` / `pg_config`-on-PATH dance the
-[native path](../native/README.md) needs.
+Because python and pip come from the env and the pinned wheels bundle their own
+native libs, `pip install` finds everything with **zero extra environment
+variables**, unlike the `PKG_CONFIG_PATH` / `LDFLAGS` / `pg_config`-on-PATH dance
+the [native path](../native/README.md) needs.
 
 Two services are declared, so `--start-services` brings up the whole stack with
 no separate database install and no compose file:

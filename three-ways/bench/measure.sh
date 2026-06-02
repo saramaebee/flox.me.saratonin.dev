@@ -42,7 +42,9 @@ FLOX_WARM=$(elapsed "$t0" "$t1")
 
 # ---- Artifact-hash drift: same app + input, two environments --------------
 # Brings up each stack, posts the SAME sample.jpg, records the returned sha256.
-# A difference is real, observed system-library drift (libjpeg decode), not a bug.
+# A difference is real, observed environment drift, not a bug: the same pinned
+# Pillow resolves to a different platform build per environment, each bundling
+# its own image codecs.
 hash_from() { curl -s -F file=@app/sample.jpg localhost:8000/thumbnail | sed -n 's/.*"sha256":"\([0-9a-f]*\)".*/\1/p'; }
 
 echo "→ drift check: docker…"

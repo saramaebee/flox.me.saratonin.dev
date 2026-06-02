@@ -99,7 +99,7 @@ export const comparisonRows: ComparisonRow[] = [
     cells: {
       native: { value: "unpinned", rating: "bad", note: "Whatever brew/apt last installed; the source of the env-var dance." },
       docker: { value: "base + apt", rating: "mixed", note: "Pinned inside the image, but duplicated from the host setup knowledge." },
-      flox: { value: "pinned", rating: "good", note: "Same lock as the runtime; pip needs no LDFLAGS/PKG_CONFIG_PATH." },
+      flox: { value: "runtime + db pinned", rating: "mixed", note: "libpq comes from the pinned Postgres; OpenSSL/libjpeg/zlib ride in the pinned wheels, not the Flox lock. pip needs no LDFLAGS/PKG_CONFIG_PATH because those wheels are self-contained — add the libs to `[install]` + `--no-binary` to pin them too." },
     },
   },
   {
@@ -128,8 +128,8 @@ export const comparisonRows: ComparisonRow[] = [
     why: "Does the identical app produce the identical artifact across environments?",
     cells: {
       native: { value: "no guarantee", rating: "bad", note: "Output depends on whatever system libs happen to be installed." },
-      docker: { value: "differs from native", rating: "mixed", note: `Docker's libjpeg decoded sample.jpg to sha256 ${drift.docker_sha256.slice(0, 12)}…` },
-      flox: { value: "pinned & shareable", rating: "good", note: `Flox's libjpeg produced sha256 ${drift.flox_sha256.slice(0, 12)}…: different bytes, same code.` },
+      docker: { value: "differs from Flox", rating: "mixed", note: `Docker (Linux wheel) returned sha256 ${drift.docker_sha256.slice(0, 12)}… for sample.jpg.` },
+      flox: { value: "pinned & shareable", rating: "good", note: `Flox (macOS wheel) returned sha256 ${drift.flox_sha256.slice(0, 12)}…: different bytes from identical source — pin the environment, not just the packages.` },
     },
   },
 ];
@@ -243,23 +243,23 @@ export const failureMatrix: FailureMode[] = [
   {
     key: "rust",
     symptom: "`Can not find Rust compiler`",
-    rootCause: "cryptography builds from source with no wheel",
-    affects: { native: true, docker: false, flox: false },
+    rootCause: "cryptography builds from source with no wheel, and no stack here declares a Rust toolchain",
+    affects: { native: true, docker: true, flox: true },
     evidence: "reasoned",
   },
   {
     key: "jpeg",
     symptom: "jpeg/zlib headers not found",
-    rootCause: "Pillow builds from source without libjpeg-dev",
-    affects: { native: true, docker: false, flox: false },
+    rootCause: "Pillow builds from source without libjpeg-dev; Docker installs it, the Flox manifest does not",
+    affects: { native: true, docker: false, flox: true },
     evidence: "reasoned",
   },
   {
     key: "artifact-drift",
     symptom: "Same input, different output hash",
-    rootCause: "Different libjpeg decodes the image differently",
+    rootCause: "Identical pinned packages resolve to different platform builds; each wheel bundles its own image codecs",
     affects: { native: true, docker: true, flox: false },
-    evidence: "observed", // docker vs flox sha256 differ in results.json
+    evidence: "observed", // docker vs flox sha256 differ in results.json: environments diverge under identical package pins
   },
   {
     key: "dev-prod",

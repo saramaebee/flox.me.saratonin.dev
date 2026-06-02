@@ -37,11 +37,12 @@ Posting the identical `app/sample.jpg` to the identical app:
 - under **Docker**, it returned `sha256` starting `c7f0b7c9…`
   (thumbnail = 82 bytes)
 
-Same source, same input, **different output hash**, because the `libjpeg` that
-decodes the JPEG differs between nixpkgs (Flox) and Debian (Docker). This is the
-clearest possible demonstration that pinning your *Python packages* does not pin
-your *system libraries*. `results.json` records the exact hashes from the latest
-run.
+Same source, same input, **different output hash**, because the identical pinned
+`Pillow` resolves to a different platform build in each environment (Docker runs
+the Linux manylinux wheel, the Flox path the native macOS wheel), and each wheel
+bundles its own image codecs. This is the clearest possible demonstration that
+pinning your *Python packages* does not pin the *environment* they run in.
+`results.json` records the exact hashes from the latest run.
 
 ## Native path (reasoned, not run in-harness)
 
