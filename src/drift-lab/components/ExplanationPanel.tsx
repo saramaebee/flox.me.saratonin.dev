@@ -23,7 +23,7 @@ export function ExplanationPanel({ active, reproMode }: Props) {
       <div className="dl-explain dl-explain-empty">
         <span className="eyebrow">Explanation</span>
         <p>
-          All three environments agree on every assumption — the green state every
+          All three environments agree on every assumption: the green state every
           team wants and few can prove. Toggle a scenario above to introduce a
           single implicit difference and see which environment breaks, why, and
           what it costs.
@@ -70,7 +70,7 @@ export function ExplanationPanel({ active, reproMode }: Props) {
                   </p>
                   {explicitOnly ? (
                     <p className="dl-explain-honest">
-                      But this isn't magic: {s.reproducibleFix}
+                      Reproducibility makes this explicit, not automatic: {s.reproducibleFix}
                     </p>
                   ) : (
                     <p>{s.reproducibleFix}</p>

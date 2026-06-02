@@ -11,7 +11,7 @@ const POINTS = [
   },
   {
     head: "Security controls weaken when graphs differ",
-    body: "Scan local, scan CI, scan prod — and if the dependency graphs differ, you've scanned three things and shipped a fourth. Consistent environments make controls actually apply to what runs.",
+    body: "Scan local, scan CI, scan prod. If the dependency graphs differ, you've scanned three things and shipped a fourth. Consistent environments make controls apply to what actually runs.",
   },
   {
     head: "Reproducibility turns trust from a claim into evidence",

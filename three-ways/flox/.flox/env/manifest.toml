@@ -2,10 +2,11 @@ schema-version = "1.12.0"
 
 # thumbprint — the Flox procurement strategy.
 #
-# This single declarative file is the entire environment contract: the CPython
-# runtime, the Postgres server, and every system library the app links against
-# (libpq, OpenSSL, libjpeg, zlib) are pinned together in one lockfile. The same
-# manifest gives you:
+# This single declarative file is the environment contract: the CPython runtime
+# and the Postgres server (with libpq from its closure) are pinned together in
+# one lockfile. (OpenSSL/libjpeg/zlib ride in the pinned pip wheels here, not the
+# lock — add them to [install] + --no-binary to pin them too.) The same manifest
+# gives you:
 #   - a reproducible dev shell        ->  flox activate
 #   - the database, already running   ->  flox activate --start-services
 #   - a production OCI image          ->  flox containerize
@@ -42,8 +43,9 @@ on-activate = '''
   fi
 
   # First-run: create the venv and install the *pinned* Python deps. Because
-  # python, libpq, OpenSSL and libjpeg all come from this env, pip finds
-  # everything it needs with zero extra environment variables.
+  # python and pip come from this env and the pinned wheels bundle their own
+  # native libs (libjpeg/zlib/OpenSSL, plus libpq for psycopg[binary]), pip
+  # installs with zero extra environment variables.
   if [ ! -d "$VENV" ]; then
     echo "→ creating venv + installing pinned deps"
     python -m venv "$VENV"

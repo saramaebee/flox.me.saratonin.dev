@@ -20,7 +20,7 @@ export const presets: Preset[] = [
     label: "Enterprise platform team",
     blurb: "A 50-engineer org standardizing environments across many services.",
     narrative:
-      "Environment drift is not just developer annoyance. Across a platform org it compounds — broken local setup, “works on my machine” debugging, CI mismatches, deployment rollbacks, and onboarding delay all draw from the same engineering budget.",
+      "Environment drift compounds across a platform org. Broken local setup, “works on my machine” debugging, CI mismatches, deployment rollbacks, and onboarding delay all draw from the same engineering budget.",
     inputs: {
       engineers: 50,
       fullyLoadedCost: 200_000,
@@ -60,7 +60,7 @@ export const presets: Preset[] = [
     label: "ML infrastructure team",
     blurb: "GPU-bound builds where CUDA and driver mismatches dominate the tax.",
     narrative:
-      "Environment drift in ML infrastructure is not just dependency mismatch. It is GPU driver versions, CUDA compatibility, Python packaging, model-serving dependencies, and local-to-production inconsistency — each a failure mode that can burn hours per build and block a researcher cold.",
+      "Environment drift in ML infrastructure spans GPU driver versions, CUDA compatibility, Python packaging, model-serving dependencies, and local-to-production inconsistency. Each one can burn hours per build and block a researcher.",
     inputs: {
       engineers: 30,
       fullyLoadedCost: 240_000,
@@ -78,9 +78,9 @@ export const presets: Preset[] = [
   {
     key: "regulated",
     label: "Regulated software team",
-    blurb: "Where reproducibility is also an audit, provenance, and control story.",
+    blurb: "Where reproducibility is also an audit and provenance story.",
     narrative:
-      "In regulated software, reproducibility is more than productivity — it underwrites provenance, dependency control, and auditability. Drift here carries compliance risk on top of the engineering hours it quietly consumes.",
+      "In regulated software, reproducibility is what makes provenance and auditability hold up, with dependency control underneath both. Drift here carries compliance risk on top of the engineering hours it quietly consumes.",
     inputs: {
       engineers: 80,
       fullyLoadedCost: 210_000,

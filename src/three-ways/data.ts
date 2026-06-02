@@ -23,7 +23,7 @@ export const approaches: Approach[] = [
   {
     key: "native",
     label: "Native",
-    blurb: "Set up directly on the host. Fast, familiar, and entirely implicit.",
+    blurb: "Set up directly on the host. Familiar and quick, but every dependency stays implicit.",
     accent: "--node-vuln",
   },
   {
@@ -87,7 +87,7 @@ export const comparisonRows: ComparisonRow[] = [
     dimension: "Runtime version",
     why: "Is the Python the app runs on actually pinned?",
     cells: {
-      native: { value: "host default", rating: "bad", note: `Drifts per machine — this host's python3 is ${provenance.host_python}, not the pinned 3.12.` },
+      native: { value: "host default", rating: "bad", note: `Drifts per machine: this host's python3 is ${provenance.host_python}, not the pinned 3.12.` },
       docker: { value: "base image", rating: "mixed", note: "Pinned if you pin the digest; `python:3.12-slim` moves otherwise." },
       flox: { value: "manifest-pinned", rating: "good", note: "python312 resolved from one lockfile across all four systems." },
     },
@@ -95,11 +95,11 @@ export const comparisonRows: ComparisonRow[] = [
   {
     key: "syslibs",
     dimension: "System libraries",
-    why: "libpq, OpenSSL, libjpeg — the things package pins don't cover.",
+    why: "libpq, OpenSSL, libjpeg: the things package pins don't cover.",
     cells: {
       native: { value: "unpinned", rating: "bad", note: "Whatever brew/apt last installed; the source of the env-var dance." },
       docker: { value: "base + apt", rating: "mixed", note: "Pinned inside the image, but duplicated from the host setup knowledge." },
-      flox: { value: "pinned", rating: "good", note: "Same lock as the runtime; pip needs no LDFLAGS/PKG_CONFIG_PATH." },
+      flox: { value: "runtime + db pinned", rating: "mixed", note: "libpq comes from the pinned Postgres; OpenSSL/libjpeg/zlib ride in the pinned wheels, not the Flox lock. pip needs no LDFLAGS/PKG_CONFIG_PATH because those wheels are self-contained — add the libs to `[install]` + `--no-binary` to pin them too." },
     },
   },
   {
@@ -108,7 +108,7 @@ export const comparisonRows: ComparisonRow[] = [
     why: "Where Postgres comes from and who starts it.",
     cells: {
       native: { value: "install yourself", rating: "bad", note: "brew services / systemctl, created roles, hope the version matches." },
-      docker: { value: "compose service", rating: "good", note: "`db` service with a healthcheck — a real strength of the Docker path." },
+      docker: { value: "compose service", rating: "good", note: "`db` service with a healthcheck, a genuine strength of the Docker path." },
       flox: { value: "declared service", rating: "good", note: "`postgres` service in the manifest; no separate install." },
     },
   },
@@ -119,7 +119,7 @@ export const comparisonRows: ComparisonRow[] = [
     cells: {
       native: { value: "n/a", rating: "bad", note: "No prod artifact; every laptop is its own environment." },
       docker: { value: "no", rating: "bad", note: "Your editor/LSP/psql run on the host against a different Python and libpq than the container." },
-      flox: { value: "yes", rating: "good", note: `\`flox containerize\` renders the dev shell as an OCI image (${t.flox.container_size}) — same lock.` },
+      flox: { value: "yes", rating: "good", note: `\`flox containerize\` renders the dev shell as an OCI image (${t.flox.container_size}), from the same lock.` },
     },
   },
   {
@@ -128,8 +128,8 @@ export const comparisonRows: ComparisonRow[] = [
     why: "Does the identical app produce the identical artifact across environments?",
     cells: {
       native: { value: "no guarantee", rating: "bad", note: "Output depends on whatever system libs happen to be installed." },
-      docker: { value: "differs from native", rating: "mixed", note: `Docker's libjpeg decoded sample.jpg to sha256 ${drift.docker_sha256.slice(0, 12)}…` },
-      flox: { value: "pinned & shareable", rating: "good", note: `Flox's libjpeg produced sha256 ${drift.flox_sha256.slice(0, 12)}… — different bytes, same code.` },
+      docker: { value: "differs from Flox", rating: "mixed", note: `Docker (Linux wheel) returned sha256 ${drift.docker_sha256.slice(0, 12)}… for sample.jpg.` },
+      flox: { value: "pinned & shareable", rating: "good", note: `Flox (macOS wheel) returned sha256 ${drift.flox_sha256.slice(0, 12)}…: different bytes from identical source — pin the environment, not just the packages.` },
     },
   },
 ];
@@ -173,7 +173,7 @@ export const driftPoints: DriftPoint[] = [
     key: "shell",
     label: "Shell & env vars",
     layer: 3,
-    description: "PATH, PKG_CONFIG_PATH, LDFLAGS — the setup dance.",
+    description: "PATH, PKG_CONFIG_PATH, LDFLAGS: the setup dance.",
     exposure: { native: "exposed", docker: "controlled", flox: "controlled" },
   },
   {
@@ -243,23 +243,23 @@ export const failureMatrix: FailureMode[] = [
   {
     key: "rust",
     symptom: "`Can not find Rust compiler`",
-    rootCause: "cryptography builds from source with no wheel",
-    affects: { native: true, docker: false, flox: false },
+    rootCause: "cryptography builds from source with no wheel, and no stack here declares a Rust toolchain",
+    affects: { native: true, docker: true, flox: true },
     evidence: "reasoned",
   },
   {
     key: "jpeg",
     symptom: "jpeg/zlib headers not found",
-    rootCause: "Pillow builds from source without libjpeg-dev",
-    affects: { native: true, docker: false, flox: false },
+    rootCause: "Pillow builds from source without libjpeg-dev; Docker installs it, the Flox manifest does not",
+    affects: { native: true, docker: false, flox: true },
     evidence: "reasoned",
   },
   {
     key: "artifact-drift",
     symptom: "Same input, different output hash",
-    rootCause: "Different libjpeg decodes the image differently",
+    rootCause: "Identical pinned packages resolve to different platform builds; each wheel bundles its own image codecs",
     affects: { native: true, docker: true, flox: false },
-    evidence: "observed", // docker vs flox sha256 differ in results.json
+    evidence: "observed", // docker vs flox sha256 differ in results.json: environments diverge under identical package pins
   },
   {
     key: "dev-prod",

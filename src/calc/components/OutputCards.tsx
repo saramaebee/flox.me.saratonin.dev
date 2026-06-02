@@ -31,7 +31,7 @@ export function OutputCards({ inputs, outputs: o }: Props) {
 
       <p className="calc-payback">
         If reproducibility saves even one senior engineer-month per quarter, the
-        business case is already material — this model puts that at{" "}
+        business case is already material: this model puts that at{" "}
         <strong>{dollars(o.recoverableSavings)}</strong> and{" "}
         <strong>{o.fteRecovered.toFixed(2)} FTE</strong> for a{" "}
         {inputs.engineers}-engineer team.

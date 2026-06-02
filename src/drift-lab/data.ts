@@ -172,11 +172,11 @@ export const scenarios: Scenario[] = [
     affected: ["ci"],
     conflictFields: ["node"],
     symptom:
-      "Code passes locally, then CI fails on a syntax or API the older local Node accepted but the newer one rejects — or vice versa.",
+      "Code passes locally, then CI fails on a syntax or API the older local Node accepted but the newer one rejects, or the reverse.",
     rootCause:
       "Node isn't pinned. The laptop runs whatever nvm last selected; CI runs whatever the runner image ships. Two implicit defaults, two behaviors.",
     teamImpact:
-      "Red CI on a green local branch. The author re-runs, bisects, and eventually upgrades Node by hand — an hour gone, and the next teammate hits it too.",
+      "Red CI on a green local branch. The author re-runs, bisects, and eventually upgrades Node by hand. An hour gone, and the next teammate hits it too.",
     reproducibleFix:
       "Pin the Node version as a declared input so the laptop and the runner resolve the identical interpreter.",
     overrides: {
@@ -198,7 +198,7 @@ export const scenarios: Scenario[] = [
     rootCause:
       "The Python on PATH is the host default, not a pinned interpreter. Wheel selection, ABI tags, and even stdlib behavior shift with the minor version.",
     teamImpact:
-      "\"Works on my machine\" in its purest form. Diagnosis is slow because the code is identical — only the interpreter underneath it isn't.",
+      "\"Works on my machine\" in its purest form. Diagnosis is slow because the code is identical; only the interpreter underneath it isn't.",
     reproducibleFix:
       "Pin the exact CPython version as a shared input; the resolver picks the same wheels everywhere.",
     overrides: {
@@ -216,13 +216,13 @@ export const scenarios: Scenario[] = [
     affected: ["local"],
     conflictFields: ["openssl"],
     symptom:
-      "TLS handshakes, signing, or hashing behave differently — legacy ciphers are unavailable, or a library linked against 1.1 won't load against 3.",
+      "TLS handshakes, signing, or hashing behave differently: legacy ciphers are unavailable, or a library linked against 1.1 won't load against 3.",
     rootCause:
       "OpenSSL is a system library below the package manager. Your lockfile pins the Python/Node bindings but not the C library they link against.",
     teamImpact:
       "A whole class of \"it's not in the lockfile so it must be the same\" bugs. Hard to spot, easy to blame on application code.",
     reproducibleFix:
-      "Bring system libraries like OpenSSL into the same pinned definition as the language packages — one lock for both layers.",
+      "Bring system libraries like OpenSSL into the same pinned definition as the language packages: one lock for both layers.",
     overrides: {
       local: { openssl: f("1.1.1w") },
     },
@@ -260,7 +260,7 @@ export const scenarios: Scenario[] = [
     affected: ["ci"],
     conflictFields: ["syspkgs"],
     symptom:
-      "`pg_config executable not found` — psycopg fails to build from source because libpq and its headers aren't present on the runner.",
+      "`pg_config executable not found`: psycopg fails to build from source because libpq and its headers aren't present on the runner.",
     rootCause:
       "Native system packages are assumed to be there. They are on the laptop (installed long ago, forgotten) but not on a clean CI image.",
     teamImpact:
@@ -286,7 +286,7 @@ export const scenarios: Scenario[] = [
     rootCause:
       "Someone installed a package without committing the updated lock, or installed outside the locked set. The local tree no longer matches the declared one.",
     teamImpact:
-      "The dependency graph silently differs across machines — exactly the condition that makes SBOMs and audits untrustworthy.",
+      "The dependency graph silently differs across machines, exactly the condition that makes SBOMs and audits untrustworthy.",
     reproducibleFix:
       "Treat the lock as authoritative and reject out-of-band installs; every environment materializes the same recorded graph.",
     overrides: {
@@ -310,7 +310,7 @@ export const scenarios: Scenario[] = [
     teamImpact:
       "A failure that looks like a code bug but is a configuration gap. Time is lost looking in the wrong place entirely.",
     reproducibleFix:
-      "Declare the required variables as part of the environment contract — names, where they come from, and that they're mandatory. Reproducibility makes the requirement explicit; it does not (and should not) supply the secret value itself.",
+      "Declare the required variables as part of the environment contract: names, where they come from, and that they're mandatory. Reproducibility makes the requirement explicit; it does not (and should not) supply the secret value itself.",
     overrides: {
       ci: { envvars: f("DATABASE_URL UNSET") },
     },
@@ -328,7 +328,7 @@ export const scenarios: Scenario[] = [
     symptom:
       "A model that trains locally fails to load in the production-like build: the framework was built against one CUDA version and the driver/runtime present is another.",
     rootCause:
-      "The GPU toolchain is sourced from whatever the machine or base image carries. CUDA, cuDNN, and the framework build must agree — and nothing pins them together.",
+      "The GPU toolchain is sourced from whatever the machine or base image carries. CUDA, cuDNN, and the framework build must agree. Nothing pins them together.",
     teamImpact:
       "The most expensive class of drift: GPU time wasted on environment debugging instead of training, and a deploy that can't run the artifact it was handed.",
     reproducibleFix:
@@ -350,11 +350,11 @@ export const scenarios: Scenario[] = [
     affected: ["prod"],
     conflictFields: ["syspkgs"],
     symptom:
-      "A native module links against the libjpeg present at build time, but the production-like image ships a different soname — it loads, then segfaults or returns subtly different bytes.",
+      "A native module links against the libjpeg present at build time, but the production-like image ships a different soname: it loads, then segfaults or returns subtly different bytes.",
     rootCause:
       "The build environment and the runtime environment are assembled separately. The version present when compiling isn't guaranteed to be the version present when running.",
     teamImpact:
-      "Drift you can't see in a diff and can barely see in a log — the same input can produce a different output, which quietly undermines provenance.",
+      "Drift you can't see in a diff and can barely see in a log: the same input can produce a different output, which quietly undermines provenance.",
     reproducibleFix:
       "Use one pinned definition for both build and run so the library compiled against is the library executed against.",
     overrides: {

@@ -1,6 +1,6 @@
-# Native: fast, familiar, and implicit
+# Native: the implicit baseline
 
-Set the app up directly on your machine. This is the baseline everyone knows —
+Set the app up directly on your machine. This is the baseline everyone knows,
 and the one that quietly diverges between any two laptops, because nothing here
 pins the *system*: not the Python interpreter, not libpq, not OpenSSL, not the
 Postgres you run.
@@ -58,8 +58,8 @@ pip install -r ../app/requirements.txt
 
 ## Failure modes this path leaves open
 
-Modern wheels mean steps 5 often *just works* — until it doesn't. The failures
-below are what teams actually hit; which ones bite depends on the machine, which
+Modern wheels mean step 5 often works, until the machine it runs on changes. The
+failures below are what teams actually hit; which ones bite depends on the machine, which
 is exactly the problem.
 
 | Symptom | Root cause | When it bites |

@@ -44,7 +44,7 @@ export function DriftDiagram({ highlight }: Props) {
         <span>
           {highlight
             ? `coloured for: ${highlight}`
-            : "worst case — select an approach above"}
+            : "worst case: select an approach above"}
         </span>
         <span>↓ hardware</span>
       </figcaption>

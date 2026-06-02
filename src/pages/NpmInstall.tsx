@@ -15,8 +15,8 @@ export function NpmInstall() {
             Step through it. Six declared dependencies become{" "}
             <strong>{stats.total - 1} packages</strong>, a vulnerability hides{" "}
             {stats.maxDepth} levels deep, an SBOM catalogs the lot, provenance
-            asks who to trust — and Flox makes the environment around that
-            graph reproducible. Use the buttons or your ← → arrow keys.
+            asks who to trust. Flox makes the environment around that graph
+            reproducible. Use the buttons or your ← → arrow keys.
           </p>
         </div>
       </section>
@@ -27,8 +27,8 @@ export function NpmInstall() {
 
       <section className="container viz-outro">
         <p>
-          You don't stop using npm — you stop pretending{" "}
-          <code>node_modules</code> is the whole supply chain. That's the story
+          You keep using npm. What changes is treating{" "}
+          <code>node_modules</code> as the whole supply chain. That's the story
           Flox tells as <em>secure software by construction</em>. This
           walkthrough follows the same principle: it is built inside a pinned
           Flox environment and Nix flake.

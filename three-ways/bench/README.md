@@ -1,4 +1,4 @@
-# Benchmarks: real numbers, honestly labeled
+# Benchmarks: measured numbers, clearly labeled
 
 `measure.sh` records only what it can observe on the machine it runs on, and
 stamps every number with provenance (`os`/`arch`/date/versions) into
@@ -10,10 +10,12 @@ the single source of truth, so the page and the runnable demo can't drift apart.
 - **Docker** cold build (`--no-cache`), warm build (cached), final image size.
 - **Flox** cold activate (fresh cache: `initdb` + venv + pinned install), warm
   activate.
-- **Artifact-hash drift** — the same `app/sample.jpg` posted to the identical app
+- **Artifact-hash drift**: the same `app/sample.jpg` posted to the identical app
   running under Docker vs. Flox, comparing the returned `sha256`. A difference is
-  real system-library drift (the `libjpeg` that decodes the JPEG differs between
-  Debian and nixpkgs), not a bug — and it's the whole thesis in one number.
+  real environment drift, not a bug: the identical pinned `Pillow` resolves to a
+  different platform build in each environment (Docker runs the Linux wheel, the
+  Flox path the native macOS wheel), each bundling its own image codecs. Pinning
+  the packages doesn't pin the environment — that's the whole thesis in one number.
 
 ## What is NOT measured here (reasoned)
 
@@ -26,7 +28,7 @@ We run on one machine (see `provenance` in the JSON). We do **not** fabricate:
   (brew/apt/pyenv), so we don't run it inside the harness; its cost is described
   qualitatively in `record.md` and [`native/README.md`](../native/README.md).
 - **QEMU-emulated timings.** If you fill Linux/x86 cells from an Apple-Silicon
-  Mac via emulation, label them emulated — they don't reflect native silicon.
+  Mac via emulation, label them emulated; they don't reflect native silicon.
 
 See [`record.md`](record.md) for the human-observed notes that don't reduce to a
 single number.

@@ -34,7 +34,7 @@ export function ScenarioToggles({
           <span className="eyebrow">Drift scenarios</span>
           <p className="dl-toggles-hint">
             Toggle the implicit assumptions that differ between environments. They
-            compound — turn on several at once.
+            compound, so turn on several at once.
           </p>
         </div>
         <div className="dl-toggles-actions">
@@ -96,7 +96,7 @@ export function ScenarioToggles({
           <strong>Reproducible Environment Mode</strong>
           <span>
             Pin every assumption these scenarios touch into one shared, versioned
-            definition — and watch what actually resolves.
+            definition, then watch what resolves.
           </span>
         </span>
       </label>

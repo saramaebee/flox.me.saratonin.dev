@@ -14,7 +14,7 @@ const STAGES = [
   {
     key: "local",
     label: "Local setup",
-    plain: "An assumption is made implicitly — a version, a library, a variable.",
+    plain: "An assumption is made implicitly: a version, a library, a variable.",
   },
   {
     key: "ci",
@@ -24,7 +24,7 @@ const STAGES = [
   {
     key: "prod",
     label: "Production risk",
-    plain: "If it slips through, build inputs differ — provenance and SBOMs weaken.",
+    plain: "If it slips through, build inputs differ, and provenance and SBOMs weaken.",
   },
 ] as const;
 

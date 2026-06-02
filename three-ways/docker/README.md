@@ -25,7 +25,7 @@ instead of a manual install. For *shipping* the app, this is great.
 - **Cache invalidation.** Editing `app/` busts layers; a cold cache (fresh CI
   runner) or a `--no-binary` build pays the full compile cost every time.
 - **Tag drift.** `python:3.12-slim` and `postgres:16` move under you unless
-  pinned by `@sha256` — the Dockerfile here pins the patch version as a
+  pinned by `@sha256`. The Dockerfile here pins the patch version as a
   compromise; the compose `postgres:16` deliberately does not, to show the gap.
 - **Secrets.** `.env` is plaintext that both compose and the app read.
 - **Apple Silicon.** Pulling an `amd64`-only image runs under QEMU emulation;

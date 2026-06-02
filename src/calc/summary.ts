@@ -20,7 +20,7 @@ export function buildExecutiveSummary(i: DriftInputs, o: DriftOutputs): string {
     `environment drift may be costing approximately ${hours(o.annualDriftHours)} engineering hours per year, ` +
     `or ${dollars(o.annualDriftCost)} in fully loaded engineering time. ` +
     `If reproducible environments reduce drift-related waste by ${pct}%, the team could recover approximately ` +
-    `${hours(o.recoverableHours)} hours annually — equivalent to ${o.fteRecovered.toFixed(2)} full-time engineers, ` +
+    `${hours(o.recoverableHours)} hours annually, equivalent to ${o.fteRecovered.toFixed(2)} full-time engineers, ` +
     `or about ${dollars(o.recoverableSavings)} in recovered capacity. ` +
     `This is a directional estimate; it intentionally excludes harder-to-quantify effects such as delayed releases, ` +
     `security exposure, customer escalations, and morale.`

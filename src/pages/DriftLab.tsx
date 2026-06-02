@@ -64,13 +64,13 @@ export function DriftLab() {
           <h1>Local-to-CI Drift Lab</h1>
           <p className="lede">
             A visual demo of how implicit environment assumptions turn into broken
-            builds, slow onboarding, and weak software supply-chain trust — and how
+            builds, slow onboarding, and weak software supply-chain trust, and how
             a reproducible environment collapses them into one versioned contract.
           </p>
           <p className="dl-thesis">
-            Environment drift isn't random. It's the result of implicit
-            assumptions. Reproducible infrastructure turns those assumptions into
-            explicit, versioned inputs.
+            Environment drift comes from implicit assumptions, not chance.
+            Reproducible infrastructure turns those assumptions into explicit,
+            versioned inputs.
           </p>
         </div>
       </section>
@@ -165,10 +165,9 @@ export function DriftLab() {
         <p>
           This isn't “containers bad, Nix good.” Native setup is familiar but
           implicit; containers package the service yet leave local, CI, and build
-          inputs free to drift. Reproducible environments make the assumptions
-          explicit, shareable, and auditable — the future of developer environments
-          isn't a better README, it's a reproducible contract between developers,
-          CI, and production. See the companion{" "}
+          inputs free to drift. Reproducible environments make those assumptions
+          explicit and auditable: a versioned contract between developers, CI, and
+          production that a README could never enforce. See the companion{" "}
           <button className="tw-link" type="button" onClick={() => navigate("#/three-ways")}>
             Same App, Three Environments
           </button>{" "}

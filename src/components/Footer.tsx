@@ -13,7 +13,7 @@ export function Footer() {
             title="This site is built and deployed inside a Flox environment and a Nix flake."
           >
             <span className="dot" aria-hidden />
-            Built with Flox — reproducible by construction
+            Built with Flox, reproducible by construction
           </a>
           <div className="footer-links">
             <a href={site.mainSite} target="_blank" rel="noopener noreferrer">
@@ -28,7 +28,7 @@ export function Footer() {
           </div>
         </div>
         <p className="disclaimer">
-          An independent portfolio project by {site.name} — not affiliated with
+          An independent portfolio project by {site.name}. Not affiliated with
           or endorsed by Flox. Brand styling references flox.dev to demonstrate
           product-marketing fit.
         </p>

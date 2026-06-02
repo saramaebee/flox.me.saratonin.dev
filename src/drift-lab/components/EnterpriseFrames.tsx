@@ -5,7 +5,7 @@ const FRAMES = [
   {
     title: "Developer pain",
     line: "“CI is red but local is green.”",
-    body: "Hours lost re-running builds and bisecting differences that aren't in the code — they're in the environment underneath it.",
+    body: "Hours lost re-running builds and bisecting differences that live in the environment underneath the code, not in the code itself.",
   },
   {
     title: "Platform engineering pain",
@@ -20,14 +20,14 @@ const FRAMES = [
   {
     title: "Executive pain",
     line: "“Delivery variance burns engineering capacity.”",
-    body: "Drift is a recurring tax on throughput: slower onboarding, more incidents, and unpredictable delivery — paid in headcount, not line items.",
+    body: "Drift is a recurring tax on throughput: slower onboarding, more incidents, and unpredictable delivery, paid in headcount rather than line items.",
   },
 ];
 
 const TALKING_POINTS: Array<[string, string]> = [
   ["CTO", "Reduce delivery variance and recover engineering capacity lost to environment debugging."],
   ["VP Engineering", "Fewer red builds and onboarding stalls; the laptop, CI, and prod agree by construction."],
-  ["Platform Engineering", "One declared environment definition to standardize on — versioned, inspectable, rolled forward centrally."],
+  ["Platform Engineering", "One declared environment definition to standardize on: versioned, inspectable, and rolled forward centrally."],
   ["Security / Compliance", "Stable build inputs make SBOMs and provenance describe what actually shipped."],
 ];
 
