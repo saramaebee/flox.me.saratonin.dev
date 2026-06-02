@@ -18,4 +18,4 @@ uvicorn[standard]==0.34.0
 python-multipart==0.0.20
 psycopg[binary]==3.2.3
 Pillow==11.1.0
-cryptography==44.0.0
+cryptography==46.0.7
