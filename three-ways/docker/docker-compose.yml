@@ -1,0 +1,35 @@
+# Run from three-ways/ so the build context includes the shared app/:
+#   docker compose -f docker/docker-compose.yml up --build
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: postgres
+    # A named volume so data survives `down`/`up` — but note this is a second
+    # place state lives, separate from how a native dev set up their DB.
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: ..            # three-ways/ — so `COPY app/` sees the shared source
+      dockerfile: docker/Dockerfile
+    environment:
+      # Secrets in plain env — easy to leak, no real secret management.
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/postgres
+      SIGNING_KEY: ${SIGNING_KEY:-dev-demo-key}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

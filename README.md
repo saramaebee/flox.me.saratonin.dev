@@ -70,14 +70,21 @@ src/
   router.tsx           useHashRoute / navigate
   data/content.ts      site copy + project metadata
   components/          Nav, Footer, ProjectGrid, ComingSoon
-  pages/               Home, NpmInstall, + coming-soon stubs
-  styles/              theme.css (Flox tokens), global.css, viz.css
+  pages/               Home, NpmInstall, DriftCalculator, ThreeWays
+  styles/              theme.css (Flox tokens), global.css, viz.css, calc.css, threeways.css
   viz/                 the flagship
     graphData.ts        deterministic dependency tree (seeded PRNG)
     steps.ts            7-step narrative + Flox takeaways
     DependencyGraph.tsx D3 force layout, animated per step
     SbomPanel.tsx       CycloneDX-style component listing
     StepController.tsx  step state machine (buttons + ← → keys)
+  three-ways/          "Same App, Three Environments" data + widgets
+    data.ts             single source of truth (imports the benchmark JSON)
+    components/         ComparisonTable, DriftDiagram, GtmPlaybook
+three-ways/             runnable companion: ONE app, built three ways
+  app/                  the shared FastAPI service (identical across builds)
+  native/ docker/ flox/ the three procurement strategies
+  bench/                measure.sh + results.json (observed numbers)
 .flox/                  Flox environment (manifest pins bun; [build.site])
 flake.nix               hermetic Nix build + dev shell
 ```

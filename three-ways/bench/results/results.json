@@ -1,0 +1,18 @@
+{
+  "provenance": {
+    "measured_at": "2026-06-02T15:06:28Z",
+    "os": "Darwin",
+    "arch": "arm64",
+    "host_python": "3.14.2",
+    "note": "Wall-clock numbers are from a single Darwin/arm64 machine. They are illustrative of magnitude, not universal."
+  },
+  "timings": {
+    "docker": { "cold_build_s": 25.2, "warm_build_s": 0.5, "image_size": "347MB" },
+    "flox":   { "cold_activate_s": 7.9, "warm_activate_s": 0.1, "container_size": "432MB (manual: flox containerize)" }
+  },
+  "drift": {
+    "docker_sha256": "c7f0b7c956e090617f3809ea27c4bba36377b5f30cddbb47066de1656ea3075f",
+    "flox_sha256": "7c002f793d45e63b8f839a95724a738ec56f14358f2e7f6e77de4a73d94b954c",
+    "same": false
+  }
+}

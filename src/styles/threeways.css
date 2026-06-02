@@ -1,0 +1,234 @@
+/* "Same App, Three Environments" page. Reuses the shared primitives from
+ * global.css / calc.css (.container, .eyebrow, .lede, .preset-pill, .gtm,
+ * .exec-summary, .btn, .dot); only the comparison-specific pieces live here.
+ * All colours reference theme.css tokens. */
+
+.threeways-page .tw-prose {
+  max-width: 760px;
+}
+
+.tw-prose p {
+  color: var(--fg);
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.tw-aside {
+  border-left: 3px solid var(--accent);
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  color: var(--fg-muted);
+  font-size: 1.05rem;
+}
+
+/* ---- comparison table --------------------------------------------------- */
+
+.tw-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tw-why-toggle {
+  font-size: 0.85rem;
+}
+
+.tw-table-wrap {
+  overflow-x: auto;
+}
+
+.tw-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.tw-table th,
+.tw-table td {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.tw-corner {
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+
+.tw-approach {
+  font-size: 1.05rem;
+  border-top: 3px solid var(--border);
+  transition: opacity var(--transition);
+}
+
+.tw-dimension {
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.tw-why {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  margin-top: 0.25rem;
+  white-space: normal;
+  max-width: 220px;
+}
+
+.tw-cell {
+  transition: opacity var(--transition);
+}
+
+.tw-value {
+  display: inline-block;
+}
+
+/* rating accents — reuse the dependency-graph semantic tokens */
+.tw-cell.tw-bad {
+  background: color-mix(in srgb, var(--node-vuln) 9%, transparent);
+}
+.tw-cell.tw-mixed {
+  background: color-mix(in srgb, var(--color-yellow) 16%, transparent);
+}
+.tw-cell.tw-good {
+  background: color-mix(in srgb, var(--node-repro) 11%, transparent);
+}
+
+.tw-cell.tw-bad .tw-value::before { content: "× "; color: var(--node-vuln); font-weight: 700; }
+.tw-cell.tw-mixed .tw-value::before { content: "~ "; color: var(--color-orange); font-weight: 700; }
+.tw-cell.tw-good .tw-value::before { content: "✓ "; color: var(--node-repro); font-weight: 700; }
+
+.tw-dim {
+  opacity: 0.32;
+}
+
+.tw-surface-row th,
+.tw-surface-row td {
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+}
+
+/* ---- drift diagram ------------------------------------------------------ */
+
+.tw-diagram-section {
+  max-width: 760px;
+}
+
+.tw-diagram {
+  margin: 0;
+}
+
+.tw-diagram-cap {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  margin-bottom: 0.5rem;
+}
+
+.tw-diagram svg {
+  width: 100%;
+  height: auto;
+}
+
+.tw-layer-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  fill: var(--fg);
+}
+
+.tw-layer-state {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tw-legend {
+  display: flex;
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+.tw-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ---- hashes / consequence ----------------------------------------------- */
+
+.tw-hashes {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.tw-hashes > div {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tw-hash-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 54px;
+}
+
+.tw-hashes code {
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+.tw-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ---- GTM bridge --------------------------------------------------------- */
+
+.tw-bridge .gtm-frame {
+  position: relative;
+}
+
+.tw-bridge-step {
+  display: block;
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.tw-summary {
+  margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+  .tw-table { font-size: 0.85rem; }
+  .tw-table th, .tw-table td { padding: 0.6rem 0.6rem; }
+  .tw-why { max-width: 160px; }
+}
