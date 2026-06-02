@@ -1,0 +1,229 @@
+/* ───────────── Flagship visualization: npm install walkthrough ───────────── */
+
+.viz-intro {
+  padding: 72px 0 28px;
+}
+.viz-intro h1 {
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  max-width: 20ch;
+}
+.viz-intro h1 code {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 0.86em;
+}
+.viz-intro .lede {
+  margin-top: 1.1rem;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  color: var(--fg-muted);
+  max-width: 64ch;
+}
+
+/* Stage: graph on the left, narration on the right. */
+.stage {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 28px;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: 18px;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+.stage-vuln {
+  box-shadow: inset 0 0 0 1px rgba(255, 79, 174, 0.35);
+}
+.stage-repro {
+  background: linear-gradient(180deg, rgba(175, 84, 255, 0.06), var(--bg-soft));
+  box-shadow: inset 0 0 0 1px rgba(175, 84, 255, 0.32);
+}
+
+.stage-graph {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  min-height: 460px;
+  display: flex;
+}
+.dep-graph {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* SBOM panel slides in from the right edge of the graph. */
+.sbom {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 248px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.5s cubic-bezier(0.61, 1, 0.88, 1);
+  display: flex;
+  flex-direction: column;
+}
+.sbom.open {
+  transform: translateX(0);
+}
+.sbom-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sbom-file {
+  font-size: 0.82rem;
+  color: var(--color-black);
+  font-weight: 600;
+}
+.sbom-count {
+  font-size: 0.68rem;
+  color: var(--fg-muted);
+}
+.sbom-list {
+  list-style: none;
+  overflow-y: auto;
+  padding: 6px 0;
+  margin: 0;
+  flex: 1;
+}
+.sbom-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+.sbom-name {
+  color: var(--color-black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sbom-ver {
+  color: var(--fg-muted);
+}
+.sbom-badge {
+  font-size: 0.62rem;
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+.sbom-list li.vuln {
+  background: rgba(255, 79, 174, 0.1);
+}
+.sbom-list li.vuln .sbom-name,
+.sbom-list li.vuln .sbom-badge {
+  color: var(--color-rose-red);
+  font-weight: 600;
+}
+.sbom-list li.unsigned .sbom-badge {
+  color: var(--color-orange);
+}
+
+/* Narration panel */
+.stage-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px 4px;
+}
+.terminal-line {
+  background: var(--color-black);
+  color: #e8e8e8;
+  font-size: 0.84rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.step-progress {
+  display: flex;
+  gap: 7px;
+  margin: 18px 0 14px;
+}
+.pip {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  border: none;
+  background: var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition);
+}
+.pip.done {
+  background: var(--accent-soft);
+}
+.pip.current {
+  background: var(--accent);
+}
+.step-title {
+  font-size: 1.32rem;
+  margin-bottom: 0.6rem;
+}
+.step-caption {
+  color: var(--fg-muted);
+  font-size: 0.98rem;
+  flex: 1;
+}
+.step-takeaway {
+  margin-top: 1.2rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(113, 26, 255, 0.05);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.step-takeaway p {
+  margin-top: 0.35rem;
+  font-size: 0.96rem;
+  color: var(--color-black);
+}
+.step-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+.step-counter {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.viz-outro {
+  padding: 40px 0 24px;
+  text-align: center;
+}
+.viz-outro p {
+  max-width: 56ch;
+  margin: 0 auto 1.4rem;
+  color: var(--fg-muted);
+  font-size: 1.02rem;
+}
+
+@media (max-width: 860px) {
+  .stage {
+    grid-template-columns: 1fr;
+  }
+  .stage-graph {
+    min-height: 360px;
+  }
+  .sbom {
+    width: 200px;
+  }
+}

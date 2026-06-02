@@ -1,0 +1,58 @@
+/*
+ * Flox design tokens — extracted from the live flox.dev stylesheet
+ * (getComputedStyle on :root, June 2026). Kept verbatim so this microsite
+ * reads as a Flox-native artifact rather than an approximation.
+ */
+:root {
+  /* Typeface — Flox ships Geist Sans + Geist Mono */
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-body: "Geist", var(--font-system);
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, "Roboto Mono", Menlo,
+    Monaco, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace;
+
+  /* Core neutrals */
+  --color-black: #1b1b1b;
+  --color-white: #fff;
+  --color-ink: #020817; /* flox body text */
+  --color-gray-100: #fafafa;
+  --color-gray-200: #f3f3f3;
+  --color-gray-300: #e3e3e3;
+  --color-gray-400: #bfbfbf;
+  --color-gray-500: #9b9b9b;
+
+  /* Flox accent palette */
+  --color-orange: #ff7c32;
+  --color-porpol: #7b2bff;
+  --color-purple: #711aff;
+  --color-rose-red: #ff4fae;
+  --color-rose: #f47bff;
+  --color-violet: #af54ff;
+  --color-yellow: #ffd02b;
+  --color-blue: #8247ff;
+
+  --black-gradient: linear-gradient(180deg, #1b1b1bb3 0%, #1b1b1b 100%);
+  --purple-gradient: linear-gradient(135deg, #711aff 0%, #af54ff 100%);
+  --transition: 0.3s cubic-bezier(0.61, 1, 0.88, 1);
+
+  /* Semantic roles for this site */
+  --bg: var(--color-white);
+  --bg-soft: var(--color-gray-100);
+  --bg-panel: var(--color-gray-200);
+  --fg: var(--color-ink);
+  --fg-muted: var(--color-gray-500);
+  --border: var(--color-gray-300);
+  --accent: var(--color-purple);
+  --accent-soft: var(--color-violet);
+
+  /* Dependency-graph semantics (used by the flagship viz) */
+  --node-direct: var(--color-purple);
+  --node-transitive: var(--color-gray-400);
+  --node-vuln: var(--color-rose-red);
+  --node-signed: var(--color-yellow);
+  --node-repro: var(--color-violet);
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --maxw: 1140px;
+}

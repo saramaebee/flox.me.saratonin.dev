@@ -1,0 +1,8 @@
+node_modules/
+public/
+result
+result-*
+.DS_Store
+*.log
+.direnv/
+.playwright-mcp/

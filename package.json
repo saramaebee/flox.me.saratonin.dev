@@ -1,0 +1,22 @@
+{
+  "name": "flox-me-saratonin-dev",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot run server.ts",
+    "build": "bun build ./src/index.html --outdir=public --minify --public-path=/",
+    "serve": "bun run serve.ts"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/d3": "^7.4.3",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
+}
