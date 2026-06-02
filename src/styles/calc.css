@@ -1,0 +1,415 @@
+/* ───────────── Environment-drift ROI calculator ───────────── */
+
+.calc-page .eyebrow {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+/* ── Preset switcher ── */
+.preset-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.1rem;
+}
+.preset-pill {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition),
+    background var(--transition);
+}
+.preset-pill:hover {
+  border-color: var(--accent);
+  color: var(--color-black);
+}
+.preset-pill.active {
+  background: var(--purple-gradient);
+  border-color: transparent;
+  color: var(--color-white);
+}
+.preset-narrative {
+  color: var(--fg-muted);
+  font-size: 1.02rem;
+  max-width: 70ch;
+  margin-bottom: 2rem;
+}
+
+/* ── Two-column calculator ── */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 28px;
+  align-items: start;
+}
+.calc-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  padding: 1.6rem;
+}
+@media (max-width: 760px) {
+  .calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Input controls ── */
+.calc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.calc-control-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.calc-control label {
+  font-weight: 500;
+  font-size: 0.94rem;
+  color: var(--color-black);
+}
+.calc-control-value {
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.calc-control-why {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+
+/* Range sliders, themed to the accent. */
+.calc-control input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  margin-top: 0.7rem;
+  border-radius: 999px;
+  background: var(--color-gray-300);
+  cursor: pointer;
+}
+.calc-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--color-white);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.calc-control input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Numeric stepper. */
+.calc-stepper {
+  display: flex;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.calc-stepper button {
+  width: 36px;
+  flex: none;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--color-black);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.calc-stepper button:hover {
+  border-color: var(--accent);
+}
+.calc-stepper-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.calc-stepper-field .affix {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+.calc-stepper-field input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--color-black);
+  padding: 0.55rem 0;
+  text-align: right;
+  -moz-appearance: textfield;
+}
+.calc-stepper-field input::-webkit-outer-spin-button,
+.calc-stepper-field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.calc-stepper-field input:focus {
+  outline: none;
+}
+
+/* ── Output cards ── */
+.calc-output-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+.calc-output-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.calc-output-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+}
+.calc-output-label {
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  line-height: 1.35;
+}
+.calc-output-card.tone-cost .calc-output-value {
+  color: var(--node-vuln);
+}
+.calc-output-card.tone-save {
+  border-color: rgba(113, 26, 255, 0.35);
+  background: rgba(113, 26, 255, 0.05);
+}
+.calc-output-card.tone-save .calc-output-value {
+  color: var(--accent);
+}
+.calc-payback {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.calc-payback strong {
+  color: var(--color-black);
+}
+
+/* ── Chart ── */
+.drift-chart {
+  margin-top: 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--border);
+}
+.drift-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.drift-bar-label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  margin-bottom: 0.35rem;
+}
+.drift-bar-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+.drift-bar-stack {
+  display: flex;
+  height: 100%;
+  transition: width var(--transition);
+}
+.drift-seg {
+  height: 100%;
+  transition: width var(--transition);
+}
+.drift-bar-residual {
+  position: relative;
+  z-index: 2;
+}
+.drift-bar-saved {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(113, 26, 255, 0.18),
+    rgba(113, 26, 255, 0.18) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  border-left: 2px dashed var(--accent);
+  transition: width var(--transition), left var(--transition);
+}
+.drift-bar-amount {
+  position: absolute;
+  right: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--color-black);
+  z-index: 3;
+}
+.drift-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+.drift-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.drift-legend .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+
+/* ── Assumptions drawer ── */
+.assumptions {
+  margin-top: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  padding: 0 1.4rem;
+}
+.assumptions summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  font-weight: 500;
+  color: var(--color-black);
+  list-style: none;
+}
+.assumptions summary::-webkit-details-marker {
+  display: none;
+}
+.assumptions summary::before {
+  content: "▸ ";
+  color: var(--accent);
+}
+.assumptions[open] summary::before {
+  content: "▾ ";
+}
+.assumptions p {
+  color: var(--fg-muted);
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+  max-width: 72ch;
+}
+.assumptions p strong {
+  color: var(--color-black);
+}
+
+/* ── Executive summary ── */
+.exec-summary {
+  margin-top: 2rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: rgba(113, 26, 255, 0.04);
+  padding: 1.4rem 1.6rem;
+}
+.exec-summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+.exec-summary-head .eyebrow {
+  margin-bottom: 0;
+}
+.exec-summary p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--color-black);
+  max-width: 78ch;
+}
+
+/* ── GTM framing ── */
+.gtm-frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.gtm-frame {
+  padding: 1.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+.gtm-frame h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+.gtm-frame p {
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+.gtm-enablement .eyebrow {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+.gtm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.gtm-table th,
+.gtm-table td {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.gtm-table th {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+.gtm-table td.mono {
+  color: var(--accent);
+  white-space: nowrap;
+}

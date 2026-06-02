@@ -6,6 +6,7 @@ import { Nav } from "./components/Nav.tsx";
 import { Footer } from "./components/Footer.tsx";
 import { Home } from "./pages/Home.tsx";
 import { NpmInstall } from "./pages/NpmInstall.tsx";
+import { DriftCalculator } from "./pages/DriftCalculator.tsx";
 import { ComingSoon } from "./components/ComingSoon.tsx";
 import { projectBySlug } from "./data/content.ts";
 
@@ -18,6 +19,8 @@ function App() {
     page = <Home />;
   } else if (slug === "npm-install") {
     page = <NpmInstall />;
+  } else if (slug === "drift-calculator") {
+    page = <DriftCalculator />;
   } else {
     const project = projectBySlug(slug);
     page = project ? (
